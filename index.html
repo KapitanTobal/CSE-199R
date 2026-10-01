@@ -11,12 +11,9 @@
   <link rel="apple-touch-icon" href="icons/icon-192.png">
 
   <meta name="theme-color" content="#007aff">
-  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta
-    name="apple-mobile-web-app-status-bar-style"
-    content="default"
-  >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
 </head>
 
 <body>
@@ -32,19 +29,13 @@
 
   <main>
     <section class="month-navigation">
-      <button
-        type="button"
-        id="previous-month"
-        aria-label="Previous month">
+      <button type="button" id="previous-month" aria-label="Previous month">
         &larr;
       </button>
 
-      <h2 id="current-month">October 2026</h2>
+      <h2 id="current-month"></h2>
 
-      <button
-        type="button"
-        id="next-month"
-        aria-label="Next month">
+      <button type="button" id="next-month" aria-label="Next month">
         &rarr;
       </button>
     </section>
@@ -141,9 +132,7 @@
             >
           </div>
 
-          <button type="submit">
-            Save Income &amp; Budget
-          </button>
+          <button type="submit">Save Income &amp; Budget</button>
         </form>
       </section>
 
@@ -193,7 +182,7 @@
       <button
         type="button"
         id="add-savings-goal-button"
-        class="savings-action-button">
+        class="outline-button">
         Add Savings Goal
       </button>
 
@@ -241,10 +230,6 @@
 
     <section>
       <h2>Expense History</h2>
-
-      <p class="swipe-hint">
-        Swipe left on an expense to edit or delete it.
-      </p>
 
       <ul id="expense-list">
         <li class="empty-message">

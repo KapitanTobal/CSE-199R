@@ -3,38 +3,42 @@
 }
 
 :root {
-  --ios-blue: #007aff;
-  --ios-blue-dark: #0066d6;
-  --ios-red: #ff3b30;
-  --ios-green: #34c759;
-  --ios-background: #f2f2f7;
-  --ios-text: #1c1c1e;
-  --ios-secondary-text: #6c6c70;
-  --ios-border: #d1d1d6;
+  --blue: #007aff;
+  --blue-dark: #0066d6;
+  --red: #ff3b30;
+  --orange: #ff9500;
+  --green: #34c759;
+  --yellow: #ffcc00;
+  --background: #f2f2f7;
+  --text: #1c1c1e;
+  --secondary-text: #6c6c70;
+  --border: #d1d1d6;
+  --light-gray: #e5e5ea;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background-color: var(--ios-background);
-  color: var(--ios-text);
   margin: 0;
-  padding: 36px 16px 40px;
+  padding: 28px 16px 40px;
+  background: var(--background);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 header {
   max-width: 900px;
-  margin: 10px auto 28px;
+  margin: 14px auto 28px;
   text-align: center;
 }
 
 header h1 {
-  margin-bottom: 8px;
+  margin: 0 0 8px;
   font-size: 34px;
   letter-spacing: -0.8px;
 }
 
 header p {
-  color: var(--ios-secondary-text);
+  margin: 0;
+  color: var(--secondary-text);
   font-size: 16px;
 }
 
@@ -45,71 +49,61 @@ main {
 
 nav {
   max-width: 900px;
-  margin: 0 auto 25px;
+  margin: 0 auto 24px;
   text-align: center;
 }
 
 nav a {
   display: inline-block;
-  color: var(--ios-blue);
-  text-decoration: none;
-  font-weight: 600;
-  margin: 0 8px;
+  margin: 0 4px;
   padding: 9px 16px;
   border-radius: 20px;
+  color: var(--blue);
+  text-decoration: none;
+  font-weight: 600;
 }
 
 nav a:hover,
 nav a[aria-current="page"] {
-  background-color: #dbeeff;
+  background: #dbeeff;
 }
 
 section {
-  background-color: white;
-  border-radius: 20px;
-  padding: 24px;
   margin-bottom: 20px;
+  padding: 24px;
+  border-radius: 20px;
+  background: white;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
-}
-
-h1,
-h2,
-h3 {
-  letter-spacing: -0.3px;
-}
-
-h1 {
-  color: var(--ios-text);
 }
 
 h2 {
   margin-top: 0;
-  color: var(--ios-text);
+  color: var(--text);
   font-size: 22px;
 }
 
 h3 {
   margin: 0 0 8px;
-  color: var(--ios-secondary-text);
+  color: var(--secondary-text);
   font-size: 14px;
-  font-weight: 600;
 }
+
+/* Buttons */
 
 button {
   border: none;
   border-radius: 12px;
-  background-color: var(--ios-blue);
-  color: white;
   padding: 12px 18px;
+  background: var(--blue);
+  color: white;
   font: inherit;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: 0.2s ease;
 }
 
 button:hover {
-  background-color: var(--ios-blue-dark);
-  transform: translateY(-1px);
+  background: var(--blue-dark);
 }
 
 button:active {
@@ -123,6 +117,20 @@ select:focus {
   outline-offset: 2px;
 }
 
+.outline-button {
+  width: 100%;
+  border: 1px solid var(--blue);
+  background: transparent;
+  color: var(--blue);
+}
+
+.outline-button:hover {
+  background: #eaf4ff;
+  color: var(--blue-dark);
+}
+
+/* Month navigation */
+
 .month-navigation {
   display: flex;
   align-items: center;
@@ -134,8 +142,8 @@ select:focus {
 
 .month-navigation h2 {
   margin: 0;
-  text-align: center;
   font-size: 21px;
+  text-align: center;
 }
 
 .month-navigation button {
@@ -146,14 +154,12 @@ select:focus {
   font-size: 24px;
 }
 
+/* Forms */
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
-}
-
-.form-grid section {
-  height: 100%;
 }
 
 form {
@@ -163,19 +169,19 @@ form {
 }
 
 form label {
-  font-size: 15px;
+  color: var(--secondary-text);
+  font-size: 14px;
   font-weight: 600;
-  color: var(--ios-secondary-text);
 }
 
 input,
 select {
   width: 100%;
-  border: 1px solid var(--ios-border);
+  border: 1px solid var(--border);
   border-radius: 12px;
-  background-color: #f9f9fb;
-  color: var(--ios-text);
   padding: 13px;
+  background: #f9f9fb;
+  color: var(--text);
   font: inherit;
 }
 
@@ -187,24 +193,24 @@ form button {
 .currency-input {
   display: flex;
   align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 0 13px;
-  border: 1px solid var(--ios-border);
+  overflow: hidden;
+  border: 1px solid var(--border);
   border-radius: 12px;
-  background-color: #f9f9fb;
-  color: var(--ios-secondary-text);
+  background: #f9f9fb;
+}
+
+.currency-input span {
+  padding-left: 13px;
+  color: var(--secondary-text);
+  font-weight: 600;
 }
 
 .currency-input input {
   border: none;
-  padding-left: 0;
   background: transparent;
 }
 
-.currency-input input:focus {
-  outline: none;
-}
+/* Budget summary */
 
 .budget-summary {
   text-align: center;
@@ -220,21 +226,22 @@ form button {
 .summary-card {
   padding: 16px 10px;
   border-radius: 16px;
-  background-color: var(--ios-background);
-  box-shadow: none;
+  background: var(--background);
 }
 
 .summary-card p {
   margin: 0;
-  font-size: 23px;
+  font-size: 22px;
   font-weight: 700;
 }
 
+/* Gauge */
+
 .budget-gauge {
+  position: relative;
   width: 240px;
   height: 145px;
   margin: 20px auto 4px;
-  position: relative;
 }
 
 .budget-gauge svg {
@@ -250,11 +257,11 @@ form button {
 }
 
 .gauge-background {
-  stroke: #e5e5ea;
+  stroke: var(--light-gray);
 }
 
 .gauge-progress {
-  stroke: var(--ios-green);
+  stroke: var(--green);
   stroke-dasharray: 251.2;
   stroke-dashoffset: 251.2;
   transition: stroke-dashoffset 0.5s ease, stroke 0.5s ease;
@@ -262,30 +269,27 @@ form button {
 
 #budget-percent {
   position: absolute;
-  left: 0;
   right: 0;
   bottom: 12px;
-  text-align: center;
-  color: var(--ios-text);
+  left: 0;
+  color: var(--text);
   font-size: 22px;
   font-weight: 700;
-}
-
-.gauge-label,
-#budget-status {
-  font-size: 16px;
+  text-align: center;
 }
 
 .gauge-label {
   margin-top: 0;
-  color: var(--ios-secondary-text);
+  color: var(--secondary-text);
 }
 
 #budget-status {
   min-height: 24px;
-  color: var(--ios-secondary-text);
+  color: var(--secondary-text);
   font-weight: 600;
 }
+
+/* Category breakdown */
 
 #category-breakdown {
   display: flex;
@@ -306,42 +310,42 @@ form button {
 }
 
 .category-amount {
-  color: var(--ios-secondary-text);
+  color: var(--secondary-text);
 }
 
 .category-bar {
   width: 100%;
   height: 12px;
-  background-color: #e5e5ea;
-  border-radius: 20px;
   overflow: hidden;
+  border-radius: 20px;
+  background: var(--light-gray);
 }
 
 .category-fill {
+  width: 0;
   height: 100%;
-  background-color: var(--ios-blue);
   border-radius: 20px;
+  background: var(--blue);
   transition: width 0.4s ease;
 }
 
-.savings-section {
-  padding: 20px;
+.empty-message {
+  color: var(--secondary-text);
+  text-align: center;
 }
 
-#savings-goals-list {
-  display: grid;
-  gap: 14px;
-}
+/* Savings goals */
 
 .savings-goal-card {
-  padding: 16px;
-  border-radius: 16px;
+  margin-bottom: 14px;
+  padding: 18px;
+  border-radius: 18px;
   background: linear-gradient(135deg, #eaf4ff, #f2f2f7);
 }
 
 .savings-goal-card h3 {
-  margin: 0 0 10px;
-  color: var(--ios-text);
+  margin: 0 0 12px;
+  color: var(--text);
   font-size: 20px;
 }
 
@@ -350,197 +354,119 @@ form button {
   justify-content: space-between;
   gap: 10px;
   margin-bottom: 10px;
-  color: var(--ios-secondary-text);
+  color: var(--secondary-text);
   font-size: 14px;
 }
 
 .savings-progress-bar {
   width: 100%;
   height: 14px;
-  background-color: #d1d1d6;
-  border-radius: 20px;
   overflow: hidden;
+  border-radius: 20px;
+  background: var(--border);
 }
 
 .savings-progress-fill {
+  width: 0;
   height: 100%;
-  background-color: var(--ios-green);
   border-radius: 20px;
+  background: var(--green);
   transition: width 0.4s ease;
 }
 
 .savings-progress-percent {
-  margin: 8px 0;
-  text-align: center;
-  color: var(--ios-secondary-text);
+  margin: 10px 0 14px;
+  color: var(--secondary-text);
   font-weight: 600;
-}
-
-.savings-action-button {
-  margin-top: 14px;
-  background-color: transparent;
-  color: var(--ios-blue);
-  border: 1px solid var(--ios-blue);
-}
-
-.savings-action-button:hover {
-  background-color: #eaf4ff;
-  color: var(--ios-blue);
-}
-
-#savings-form {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid #e5e5ea;
+  text-align: center;
 }
 
 .savings-buttons {
   display: flex;
+  justify-content: flex-end;
   gap: 8px;
-  margin-top: 12px;
 }
 
 .savings-buttons button {
-  flex: 1;
-  padding: 9px 12px;
-  font-size: 14px;
+  padding: 7px 12px;
+  border-radius: 9px;
+  font-size: 13px;
 }
 
-.delete-goal-button,
-.delete-button {
-  background-color: var(--ios-red);
+.delete-goal-button {
+  background: var(--red);
 }
 
-.delete-goal-button:hover,
-.delete-button:hover {
-  background-color: #d70015;
+.delete-goal-button:hover {
+  background: #d70015;
 }
 
-/* Expense swipe cards */
+#savings-form {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--light-gray);
+}
+
+/* Expense history */
 
 #expense-list {
+  margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.swipe-hint {
-  margin-top: -8px;
-  margin-bottom: 16px;
-  color: var(--ios-secondary-text);
-  font-size: 14px;
-}
-
-.swipe-item {
-  position: relative;
-  overflow: hidden;
-  min-height: 60px;
-  margin: 10px 0;
-  border-radius: 14px;
-  background-color: #e5e5ea;
-  touch-action: pan-y;
-}
-
-.expense-content {
-  position: relative;
-  z-index: 2;
+.expense-item {
   display: flex;
   align-items: center;
-  min-height: 60px;
-  padding: 14px;
-  background-color: var(--ios-background);
-  transition: transform 0.25s ease;
+  gap: 12px;
+  margin: 10px 0;
+  padding: 13px;
+  border-radius: 14px;
+  background: var(--background);
 }
 
-.expense-content span {
+.expense-info {
   flex: 1;
+  min-width: 0;
 }
 
-.swipe-actions {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
+.expense-name {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.expense-actions {
   display: flex;
-  width: 128px;
+  flex-shrink: 0;
+  gap: 6px;
 }
 
-.swipe-actions button {
-  width: 64px;
-  min-height: 60px;
-  padding: 0;
-  border-radius: 0;
-  font-size: 21px;
-  box-shadow: none;
+.expense-actions button {
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 12px;
 }
 
 .edit-button {
-  background-color: #dbeeff;
-  color: var(--ios-blue);
-}
-
-.edit-button:hover {
-  background-color: #c5e4ff;
-  color: var(--ios-blue);
+  background: var(--blue);
 }
 
 .delete-button {
-  background-color: #ffd9d6;
-  color: #d70015;
+  background: var(--red);
 }
 
-.delete-button:hover {
-  background-color: #ffc2bd;
-  color: #d70015;
+.delete-button:hover,
+.delete-goal-button:hover {
+  background: #d70015;
 }
 
-.swiped .expense-content {
-  transform: translateX(-128px);
-}
+/* Mobile layout */
 
-.empty-message {
-  color: var(--ios-secondary-text);
-  text-align: center;
-  font-size: 16px;
-  list-style: none;
-}
-
-#expense-list .empty-message {
-  display: block;
-  padding: 18px;
-  background-color: transparent;
-}
-
-/* Desktop fallback */
-
-@media (hover: hover) and (pointer: fine) {
-  .swipe-item {
-    display: flex;
-  }
-
-  .expense-content {
-    flex: 1;
-    transform: none !important;
-  }
-
-  .swipe-actions {
-    position: static;
-    width: 128px;
-    flex-shrink: 0;
-  }
-}
-
-/* Responsive layout */
-
-@media (max-width: 800px) {
-  .summary-cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 650px) {
+@media (max-width: 700px) {
   body {
-    padding: 36px 12px 30px;
+    padding: 24px 12px 30px;
   }
 
   header h1 {
@@ -552,8 +478,8 @@ form button {
     border-radius: 18px;
   }
 
-  .summary-cards,
-  .form-grid {
+  .form-grid,
+  .summary-cards {
     grid-template-columns: 1fr;
   }
 
@@ -561,8 +487,8 @@ form button {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    text-align: left;
     padding: 14px 16px;
+    text-align: left;
   }
 
   .summary-card h3 {
@@ -578,64 +504,24 @@ form button {
   }
 
   nav a {
+    margin: 0 2px;
     padding: 8px 12px;
-    margin: 0 3px;
+  }
+
+  .expense-item {
+    align-items: flex-start;
+  }
+
+  .expense-actions {
+    flex-direction: column;
+  }
+
+  .expense-actions button {
+    width: 58px;
   }
 
   .savings-amounts {
-    font-size: 13px;
+    flex-direction: column;
+    gap: 4px;
   }
-}
-
-.swipe-item {
-  position: relative;
-  overflow: hidden;
-  min-height: 60px;
-  margin: 10px 0;
-  border-radius: 14px;
-  background-color: #e5e5ea;
-  touch-action: pan-y;
-}
-
-.expense-content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  min-height: 60px;
-  padding: 14px;
-  background-color: var(--ios-background);
-  transition: transform 0.3s ease;
-}
-
-.expense-content span {
-  flex: 1;
-}
-
-.swipe-actions {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
-  display: flex;
-  width: 128px;
-  transform: translateX(100%);
-  transition: transform 0.3s ease;
-}
-
-.swipe-actions button {
-  width: 64px;
-  min-height: 60px;
-  padding: 0;
-  border-radius: 0;
-  font-size: 21px;
-}
-
-.swiped .expense-content {
-  transform: translateX(-128px);
-}
-
-.swiped .swipe-actions {
-  transform: translateX(0);
 }
