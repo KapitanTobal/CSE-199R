@@ -7,7 +7,6 @@
   --ios-blue-dark: #0066d6;
   --ios-red: #ff3b30;
   --ios-green: #34c759;
-  --ios-yellow: #ffcc00;
   --ios-background: #f2f2f7;
   --ios-text: #1c1c1e;
   --ios-secondary-text: #6c6c70;
@@ -96,8 +95,6 @@ h3 {
   font-weight: 600;
 }
 
-/* Buttons */
-
 button {
   border: none;
   border-radius: 12px;
@@ -126,8 +123,6 @@ select:focus {
   outline-offset: 2px;
 }
 
-/* Navigation */
-
 .month-navigation {
   display: flex;
   align-items: center;
@@ -150,8 +145,6 @@ select:focus {
   border-radius: 50%;
   font-size: 24px;
 }
-
-/* Forms */
 
 .form-grid {
   display: grid;
@@ -213,8 +206,6 @@ form button {
   outline: none;
 }
 
-/* Budget summary */
-
 .budget-summary {
   text-align: center;
 }
@@ -238,8 +229,6 @@ form button {
   font-size: 23px;
   font-weight: 700;
 }
-
-/* Gauge */
 
 .budget-gauge {
   width: 240px;
@@ -282,20 +271,21 @@ form button {
   font-weight: 700;
 }
 
+.gauge-label,
+#budget-status {
+  font-size: 16px;
+}
+
 .gauge-label {
   margin-top: 0;
   color: var(--ios-secondary-text);
-  font-size: 16px;
 }
 
 #budget-status {
   min-height: 24px;
   color: var(--ios-secondary-text);
-  font-size: 16px;
   font-weight: 600;
 }
-
-/* Category breakdown */
 
 #category-breakdown {
   display: flex;
@@ -329,29 +319,30 @@ form button {
 
 .category-fill {
   height: 100%;
-  width: 0%;
   background-color: var(--ios-blue);
   border-radius: 20px;
   transition: width 0.4s ease;
 }
 
-/* Savings goal */
-
 .savings-section {
   padding: 20px;
 }
 
-.savings-goal-display {
-  margin: 12px 0;
-  padding: 14px 18px;
-  border-radius: 18px;
+#savings-goals-list {
+  display: grid;
+  gap: 14px;
+}
+
+.savings-goal-card {
+  padding: 16px;
+  border-radius: 16px;
   background: linear-gradient(135deg, #eaf4ff, #f2f2f7);
 }
 
-.savings-goal-display h3 {
-  margin: 0 0 8px;
+.savings-goal-card h3 {
+  margin: 0 0 10px;
   color: var(--ios-text);
-  font-size: 21px;
+  font-size: 20px;
 }
 
 .savings-amounts {
@@ -371,100 +362,147 @@ form button {
   overflow: hidden;
 }
 
-#savings-progress-fill {
+.savings-progress-fill {
   height: 100%;
   background-color: var(--ios-green);
   border-radius: 20px;
   transition: width 0.4s ease;
 }
 
-#savings-progress-percent {
-  margin: 10px 0 0;
+.savings-progress-percent {
+  margin: 8px 0;
   text-align: center;
   color: var(--ios-secondary-text);
   font-weight: 600;
 }
 
-.savings-settings {
-  margin-top: 10px;
+.savings-action-button {
+  margin-top: 14px;
+  background-color: transparent;
   color: var(--ios-blue);
-}
-
-.savings-settings summary {
-  display: inline-block;
-  padding: 9px 14px;
   border: 1px solid var(--ios-blue);
-  border-radius: 10px;
-  color: var(--ios-blue);
-  cursor: pointer;
-  font-weight: 600;
-  list-style: none;
 }
 
-.savings-settings summary:hover {
+.savings-action-button:hover {
   background-color: #eaf4ff;
+  color: var(--ios-blue);
 }
 
-.savings-settings form {
+#savings-form {
   margin-top: 16px;
   padding-top: 16px;
   border-top: 1px solid #e5e5ea;
 }
 
-.edit-savings-button {
-  display: block;
-  margin: 12px auto 0;
-  padding: 8px 14px;
-  border: 1px solid var(--ios-blue);
-  border-radius: 10px;
-  background-color: transparent;
-  color: var(--ios-blue);
+.savings-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.savings-buttons button {
+  flex: 1;
+  padding: 9px 12px;
   font-size: 14px;
 }
 
-.edit-savings-button:hover {
-  background-color: #eaf4ff;
-  color: var(--ios-blue);
+.delete-goal-button,
+.delete-button {
+  background-color: var(--ios-red);
 }
 
-/* Expense history */
+.delete-goal-button:hover,
+.delete-button:hover {
+  background-color: #d70015;
+}
+
+/* Expense swipe cards */
 
 #expense-list {
   padding: 0;
   list-style: none;
 }
 
-#expense-list li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 10px 0;
-  padding: 13px;
-  border-radius: 14px;
-  background-color: var(--ios-background);
+.swipe-hint {
+  margin-top: -8px;
+  margin-bottom: 16px;
+  color: var(--ios-secondary-text);
+  font-size: 14px;
 }
 
-#expense-list li span {
+.swipe-item {
+  position: relative;
+  overflow: hidden;
+  min-height: 60px;
+  margin: 10px 0;
+  border-radius: 14px;
+  background-color: #e5e5ea;
+  touch-action: pan-y;
+}
+
+.expense-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  min-height: 60px;
+  padding: 14px;
+  background-color: var(--ios-background);
+  transition: transform 0.25s ease;
+}
+
+.expense-content span {
   flex: 1;
 }
 
-#expense-list li button {
-  padding: 8px 12px;
-  font-size: 13px;
+.swipe-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  width: 128px;
 }
 
-#expense-list li button:last-child {
-  background-color: var(--ios-red);
+.swipe-actions button {
+  width: 64px;
+  min-height: 60px;
+  padding: 0;
+  border-radius: 0;
+  font-size: 21px;
+  box-shadow: none;
 }
 
-#expense-list li button:last-child:hover {
-  background-color: #d70015;
+.edit-button {
+  background-color: #dbeeff;
+  color: var(--ios-blue);
+}
+
+.edit-button:hover {
+  background-color: #c5e4ff;
+  color: var(--ios-blue);
+}
+
+.delete-button {
+  background-color: #ffd9d6;
+  color: #d70015;
+}
+
+.delete-button:hover {
+  background-color: #ffc2bd;
+  color: #d70015;
+}
+
+.swiped .expense-content {
+  transform: translateX(-128px);
 }
 
 .empty-message {
   color: var(--ios-secondary-text);
   text-align: center;
   font-size: 16px;
+  list-style: none;
 }
 
 #expense-list .empty-message {
@@ -473,14 +511,23 @@ form button {
   background-color: transparent;
 }
 
-/* Subscriptions */
+/* Desktop fallback */
 
-#subscription-list {
-  padding-left: 20px;
-}
+@media (hover: hover) and (pointer: fine) {
+  .swipe-item {
+    display: flex;
+  }
 
-#subscription-list li {
-  margin: 12px 0;
+  .expense-content {
+    flex: 1;
+    transform: none !important;
+  }
+
+  .swipe-actions {
+    position: static;
+    width: 128px;
+    flex-shrink: 0;
+  }
 }
 
 /* Responsive layout */
@@ -535,312 +582,7 @@ form button {
     margin: 0 3px;
   }
 
-  #expense-list li {
-    flex-wrap: wrap;
-  }
-
-  #expense-list li span {
-    flex-basis: 100%;
-    margin-bottom: 4px;
-  }
-
-  #expense-list li button {
-    flex: 1;
-  }
-}
-
-.savings-action-button {
-  background-color: transparent;
-  color: var(--ios-blue);
-  border: 1px solid var(--ios-blue);
-  padding: 9px 14px;
-  font-size: 14px;
-}
-
-.savings-action-button:hover {
-  background-color: #eaf4ff;
-  color: var(--ios-blue);
-}
-
-#savings-form {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid #e5e5ea;
-}
-
-#savings-goals-list {
-  display: grid;
-  gap: 14px;
-}
-
-.savings-goal-card {
-  padding: 16px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #eaf4ff, #f2f2f7);
-}
-
-.savings-goal-card h3 {
-  margin: 0 0 10px;
-  color: var(--ios-text);
-  font-size: 20px;
-}
-
-.savings-amounts {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 10px;
-  color: var(--ios-secondary-text);
-  font-size: 14px;
-}
-
-.savings-progress-bar {
-  width: 100%;
-  height: 14px;
-  background-color: #d1d1d6;
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-.savings-progress-fill {
-  height: 100%;
-  background-color: var(--ios-green);
-  border-radius: 20px;
-  transition: width 0.4s ease;
-}
-
-.savings-progress-percent {
-  margin: 8px 0;
-  text-align: center;
-  color: var(--ios-secondary-text);
-  font-weight: 600;
-}
-
-.savings-buttons {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.savings-buttons button {
-  flex: 1;
-  padding: 8px 12px;
-  font-size: 14px;
-}
-
-.delete-goal-button {
-  background-color: var(--ios-red);
-}
-
-.delete-goal-button:hover {
-  background-color: #d70015;
-}
-
-#savings-form {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid #e5e5ea;
-}
-
-@media (max-width: 650px) {
   .savings-amounts {
     font-size: 13px;
   }
-}
-
-/* Mobile-first defaults */
-
-body {
-  padding: 16px 12px 30px;
-}
-
-main {
-  width: 100%;
-}
-
-section {
-  padding: 18px;
-  border-radius: 18px;
-}
-
-button {
-  min-height: 48px;
-  padding: 12px 16px;
-}
-
-input,
-select {
-  min-height: 48px;
-  font-size: 16px;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-}
-
-.summary-cards {
-  grid-template-columns: 1fr;
-}
-
-#expense-list li {
-  min-height: 58px;
-  padding: 14px;
-}
-
-/* Larger screens */
-
-@media (min-width: 651px) {
-  body {
-    padding: 36px 20px 40px;
-  }
-
-  .form-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .summary-cards {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-#expense-list {
-  padding: 0;
-  list-style: none;
-}
-
-.swipe-item {
-  position: relative;
-  overflow: hidden;
-  min-height: 60px;
-  margin: 10px 0;
-  border-radius: 14px;
-  background-color: #e5e5ea;
-  touch-action: pan-y;
-}
-
-.expense-content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  min-height: 60px;
-  padding: 14px;
-  background-color: var(--ios-background);
-  transition: transform 0.25s ease;
-}
-
-.expense-content span {
-  flex: 1;
-}
-
-.swipe-actions {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
-  display: flex;
-  width: 140px;
-}
-
-.swipe-actions button {
-  flex: 1;
-  height: 100%;
-  border-radius: 0;
-  padding: 0 8px;
-  font-size: 13px;
-}
-
-.edit-button {
-  background-color: var(--ios-blue);
-}
-
-.delete-button {
-  background-color: var(--ios-red);
-}
-
-.swiped .expense-content {
-  transform: translateX(-140px);
-}
-
-.empty-message {
-  color: var(--ios-secondary-text);
-  text-align: center;
-  font-size: 16px;
-  list-style: none;
-}
-
-.swipe-hint {
-  margin-top: -8px;
-  margin-bottom: 16px;
-  color: var(--ios-secondary-text);
-  font-size: 14px;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .swipe-item {
-    display: flex;
-    overflow: hidden;
-  }
-
-  .expense-content {
-    flex: 1;
-    transform: none;
-  }
-
-  .swipe-actions {
-    position: static;
-    width: 140px;
-    flex-shrink: 0;
-  }
-
-  .swipe-actions button {
-    min-width: 70px;
-  }
-}
-
-.swipe-item {
-  position: relative;
-  overflow: hidden;
-  min-height: 60px;
-  margin: 10px 0;
-  border-radius: 14px;
-  background-color: #e5e5ea;
-  touch-action: pan-y;
-}
-
-.expense-content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  min-height: 60px;
-  padding: 14px;
-  background-color: var(--ios-background);
-  transition: transform 0.25s ease;
-}
-
-.expense-content span {
-  flex: 1;
-}
-
-.swipe-actions {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  width: 140px;
-}
-
-.swipe-actions button {
-  flex: 1;
-  border-radius: 0;
-  font-size: 13px;
-}
-
-.swiped .expense-content {
-  transform: translateX(-140px);
 }

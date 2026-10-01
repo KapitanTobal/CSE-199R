@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-    <title>Monthly Budget Dashboard</title>
-  
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
-  
-    <meta name="theme-color" content="#007aff">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta
-      name="apple-mobile-web-app-status-bar-style"
-      content="default"
-    >
-  </head>
-  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Monthly Budget Dashboard</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+  <meta name="theme-color" content="#007aff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
+  >
+</head>
+
 <body>
   <nav>
     <a href="index.html" aria-current="page">Budget</a>
@@ -32,13 +32,19 @@
 
   <main>
     <section class="month-navigation">
-      <button type="button" id="previous-month" aria-label="Previous month">
+      <button
+        type="button"
+        id="previous-month"
+        aria-label="Previous month">
         &larr;
       </button>
 
-      <h2 id="current-month">September 2026</h2>
+      <h2 id="current-month">October 2026</h2>
 
-      <button type="button" id="next-month" aria-label="Next month">
+      <button
+        type="button"
+        id="next-month"
+        aria-label="Next month">
         &rarr;
       </button>
     </section>
@@ -177,32 +183,32 @@
 
     <section class="savings-section">
       <h2>Savings Goals</h2>
-    
+
       <div id="savings-goals-list">
         <p class="empty-message">
           Add a savings goal to start tracking your progress.
         </p>
       </div>
-    
+
       <button
         type="button"
         id="add-savings-goal-button"
         class="savings-action-button">
         Add Savings Goal
       </button>
-    
+
       <form id="savings-form" hidden>
         <label for="savings-name">Goal name:</label>
-    
+
         <input
           type="text"
           id="savings-name"
           placeholder="Emergency Fund"
           required
         >
-    
+
         <label for="savings-target">Target amount:</label>
-    
+
         <div class="currency-input">
           <span>$</span>
           <input
@@ -213,9 +219,9 @@
             required
           >
         </div>
-    
+
         <label for="savings-current">Amount saved:</label>
-    
+
         <div class="currency-input">
           <span>$</span>
           <input
@@ -226,7 +232,7 @@
             required
           >
         </div>
-    
+
         <button type="submit" id="savings-submit-button">
           Save Goal
         </button>
