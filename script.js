@@ -7,114 +7,98 @@ let editingIndex = null;
 let savingsGoals = [];
 let editingSavingsIndex = null;
 
-// Budget elements
 const incomeForm = document.querySelector("#income-form");
 const incomeInput = document.querySelector("#income");
 const totalIncomeDisplay = document.querySelector("#total-income");
-
 const budgetLimitInput = document.querySelector("#budget-limit");
-const budgetLimitDisplay = document.querySelector(
-  "#budget-limit-display"
-);
+const budgetLimitDisplay = document.querySelector("#budget-limit-display");
 
-// Expense elements
 const expenseForm = document.querySelector("#expense-form");
+const expenseDescriptionInput = document.querySelector("#expense-description");
 const expenseAmountInput = document.querySelector("#expense-amount");
 const categoryInput = document.querySelector("#category");
+const expenseDateInput = document.querySelector("#expense-date");
 const totalExpensesDisplay = document.querySelector("#total-expenses");
-const remainingBudgetDisplay = document.querySelector(
-  "#remaining-budget"
-);
+const remainingBudgetDisplay = document.querySelector("#remaining-budget");
 const budgetStatus = document.querySelector("#budget-status");
 const expenseList = document.querySelector("#expense-list");
+const expenseSubmitButton = expenseForm.querySelector('button[type="submit"]');
+const emptyAddExpenseButton = document.querySelector("#empty-add-expense-button");
 
-const expenseSubmitButton = expenseForm.querySelector(
-  'button[type="submit"]'
-);
-
-// Month elements
 const currentMonthDisplay = document.querySelector("#current-month");
 const previousMonthButton = document.querySelector("#previous-month");
 const nextMonthButton = document.querySelector("#next-month");
 
-// Other elements
 const categoryBreakdown = document.querySelector("#category-breakdown");
 const gaugeProgress = document.querySelector("#gauge-progress");
 const budgetPercent = document.querySelector("#budget-percent");
+const gaugeDetails = document.querySelector("#gauge-details");
 
-// Savings elements
 const savingsForm = document.querySelector("#savings-form");
 const savingsNameInput = document.querySelector("#savings-name");
 const savingsTargetInput = document.querySelector("#savings-target");
 const savingsCurrentInput = document.querySelector("#savings-current");
 const savingsGoalsList = document.querySelector("#savings-goals-list");
-const addSavingsGoalButton = document.querySelector(
-  "#add-savings-goal-button"
-);
-const savingsSubmitButton = document.querySelector(
-  "#savings-submit-button"
-);
+const addSavingsGoalButton = document.querySelector("#add-savings-goal-button");
+const savingsSubmitButton = document.querySelector("#savings-submit-button");
 
 function getMonthKey() {
   const year = selectedMonth.getFullYear();
   const month = String(selectedMonth.getMonth() + 1).padStart(2, "0");
-
   return `${year}-${month}`;
 }
 
+function getTodayString() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 function displaySelectedMonth() {
-  currentMonthDisplay.textContent = selectedMonth.toLocaleDateString(
-    "en-US",
-    {
-      month: "long",
-      year: "numeric"
-    }
-  );
+  currentMonthDisplay.textContent = selectedMonth.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric"
+  });
 }
 
 function saveCurrentMonth() {
-  const monthData = {
+  localStorage.setItem(`budget-${getMonthKey()}`, JSON.stringify({
     income: monthlyIncome,
     budgetLimit: monthlyBudgetLimit,
-    expenses: expenses
-  };
-
-  localStorage.setItem(
-    `budget-${getMonthKey()}`,
-    JSON.stringify(monthData)
-  );
+    expenses
+  }));
 }
 
 function loadCurrentMonth() {
-  const savedData = localStorage.getItem(
-    `budget-${getMonthKey()}`
-  );
+  const savedData = localStorage.getItem(`budget-${getMonthKey()}`);
 
   if (savedData) {
-    const monthData = JSON.parse(savedData);
-
-    monthlyIncome = Number(monthData.income) || 0;
-    monthlyBudgetLimit = Number(monthData.budgetLimit) || 0;
-
-    expenses = Array.isArray(monthData.expenses)
-      ? monthData.expenses
-      : [];
+    try {
+      const monthData = JSON.parse(savedData);
+      monthlyIncome = Number(monthData.income) || 0;
+      monthlyBudgetLimit = Number(monthData.budgetLimit) || 0;
+      expenses = Array.isArray(monthData.expenses) ? monthData.expenses : [];
+    } catch {
+      monthlyIncome = 0;
+      monthlyBudgetLimit = 0;
+      expenses = [];
+    }
   } else {
     monthlyIncome = 0;
     monthlyBudgetLimit = 0;
     expenses = [];
   }
 
-  incomeInput.value =
-    monthlyIncome > 0 ? monthlyIncome.toFixed(2) : "";
-
-  budgetLimitInput.value =
-    monthlyBudgetLimit > 0
-      ? monthlyBudgetLimit.toFixed(2)
-      : "";
+  incomeInput.value = monthlyIncome > 0 ? monthlyIncome.toFixed(2) : "";
+  budgetLimitInput.value = monthlyBudgetLimit > 0
+    ? monthlyBudgetLimit.toFixed(2)
+    : "";
 
   editingIndex = null;
   expenseForm.reset();
+  expenseDateInput.value = getTodayString();
   expenseSubmitButton.textContent = "Add Expense";
 
   displaySelectedMonth();
@@ -122,23 +106,23 @@ function loadCurrentMonth() {
   updateBudgetDisplay();
 }
 
-function updateBudgetDisplay() {
-  const totalExpenses = expenses.reduce(function (total, expense) {
-    return total + Number(expense.amount);
+function getTotalExpenses() {
+  return expenses.reduce((total, expense) => {
+    return total + (Number(expense.amount) || 0);
   }, 0);
+}
 
+function updateBudgetDisplay() {
+  const totalExpenses = getTotalExpenses();
   const remainingBudget = monthlyBudgetLimit - totalExpenses;
 
   totalIncomeDisplay.textContent = monthlyIncome.toFixed(2);
-  budgetLimitDisplay.textContent =
-    monthlyBudgetLimit.toFixed(2);
+  budgetLimitDisplay.textContent = monthlyBudgetLimit.toFixed(2);
   totalExpensesDisplay.textContent = totalExpenses.toFixed(2);
-  remainingBudgetDisplay.textContent =
-    remainingBudget.toFixed(2);
+  remainingBudgetDisplay.textContent = remainingBudget.toFixed(2);
 
   if (monthlyBudgetLimit === 0) {
-    budgetStatus.textContent =
-      "Enter your income and monthly budget to begin.";
+    budgetStatus.textContent = "Enter your income and monthly budget to begin.";
   } else if (remainingBudget < 0) {
     budgetStatus.textContent =
       `Over budget by $${Math.abs(remainingBudget).toFixed(2)}. ` +
@@ -157,19 +141,13 @@ function updateBudgetDisplay() {
 }
 
 function updateBudgetGauge(totalExpenses) {
-  let percentUsed = 0;
+  const percentUsed = monthlyBudgetLimit > 0
+    ? (totalExpenses / monthlyBudgetLimit) * 100
+    : 0;
 
-  if (monthlyBudgetLimit > 0) {
-    percentUsed =
-      (totalExpenses / monthlyBudgetLimit) * 100;
-  }
-
-  const gaugePercent = Math.min(percentUsed, 100);
   const gaugeLength = 251.2;
-
-  const dashOffset =
-    gaugeLength -
-    (gaugePercent / 100) * gaugeLength;
+  const gaugePercent = Math.min(percentUsed, 100);
+  const dashOffset = gaugeLength - (gaugePercent / 100) * gaugeLength;
 
   let gaugeColor = "#34c759";
 
@@ -185,14 +163,15 @@ function updateBudgetGauge(totalExpenses) {
 
   gaugeProgress.style.strokeDashoffset = dashOffset;
   gaugeProgress.style.stroke = gaugeColor;
+  gaugeDetails.textContent =
+    `$${totalExpenses.toFixed(2)} spent of $${monthlyBudgetLimit.toFixed(2)}`;
 
   if (monthlyBudgetLimit === 0) {
     budgetPercent.textContent = "Add budget";
   } else if (totalExpenses === 0) {
     budgetPercent.textContent = "No spending yet";
   } else {
-    budgetPercent.textContent =
-      `${Math.round(percentUsed)}% used`;
+    budgetPercent.textContent = `${Math.round(percentUsed)}% used`;
   }
 }
 
@@ -202,74 +181,128 @@ function getCategoryIcon(category) {
     Housing: "🏠",
     Transportation: "🚗",
     School: "🎓",
+    Bills: "🧾",
+    Shopping: "🛍️",
+    Entertainment: "🎬",
     Other: "📦"
   };
 
   return icons[category] || "💰";
 }
 
+function formatExpenseDate(dateValue) {
+  if (!dateValue) return "Date not provided";
+
+  const date = new Date(`${dateValue}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return "Date not provided";
+
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  });
+}
+
+function closeActionMenus(except = null) {
+  document.querySelectorAll(".card-actions.is-open").forEach((menu) => {
+    if (menu !== except) {
+      menu.hidden = true;
+      menu.classList.remove("is-open");
+
+      const button = menu.parentElement.querySelector(".more-button");
+      if (button) button.setAttribute("aria-expanded", "false");
+    }
+  });
+}
+
+document.addEventListener("click", () => closeActionMenus());
+
 function renderExpenses() {
   expenseList.innerHTML = "";
 
   if (expenses.length === 0) {
     const emptyMessage = document.createElement("li");
+    emptyMessage.className = "empty-message expense-empty-state";
 
-    emptyMessage.className = "empty-message";
-    emptyMessage.textContent =
-      "Your expenses will appear here after you add one.";
+    const message = document.createElement("span");
+    message.textContent = "Add your first expense to see your progress.";
 
+    const addButton = document.createElement("button");
+    addButton.type = "button";
+    addButton.className = "small-button";
+    addButton.textContent = "Add Expense";
+    addButton.addEventListener("click", focusExpenseForm);
+
+    emptyMessage.append(message, addButton);
     expenseList.appendChild(emptyMessage);
     return;
   }
 
-  expenses.forEach(function (expense, index) {
+  expenses.forEach((expense, index) => {
     const listItem = document.createElement("li");
     listItem.className = "expense-item";
 
-    const expenseInfo = document.createElement("div");
-    expenseInfo.className = "expense-info";
+    const info = document.createElement("div");
+    info.className = "expense-info";
 
-    const expenseName = document.createElement("span");
-    expenseName.className = "expense-name";
+    const description = document.createElement("strong");
+    description.className = "expense-description";
+    description.textContent = expense.description || expense.category;
 
-    expenseName.textContent =
-      `${getCategoryIcon(expense.category)} ` +
-      `${expense.category}: ` +
-      `$${Number(expense.amount).toFixed(2)}`;
+    const details = document.createElement("span");
+    details.className = "expense-details";
+    details.textContent =
+      `${getCategoryIcon(expense.category)} ${expense.category} • ` +
+      `${formatExpenseDate(expense.date)}`;
 
-    expenseInfo.appendChild(expenseName);
+    const amount = document.createElement("strong");
+    amount.className = "expense-amount";
+    amount.textContent = `$${Number(expense.amount).toFixed(2)}`;
 
-    const expenseActions = document.createElement("div");
-    expenseActions.className = "expense-actions";
+    info.append(description, details);
+
+    const menuButton = document.createElement("button");
+    menuButton.type = "button";
+    menuButton.className = "more-button";
+    menuButton.setAttribute("aria-label", `More options for ${expense.description || expense.category}`);
+    menuButton.setAttribute("aria-expanded", "false");
+    menuButton.textContent = "•••";
+
+    const actions = document.createElement("div");
+    actions.className = "card-actions expense-actions";
+    actions.hidden = true;
+
+    menuButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      closeActionMenus(actions);
+      actions.hidden = !actions.hidden;
+      actions.classList.toggle("is-open", !actions.hidden);
+      menuButton.setAttribute("aria-expanded", String(!actions.hidden));
+    });
 
     const editButton = document.createElement("button");
     editButton.type = "button";
     editButton.className = "edit-button";
     editButton.textContent = "Edit";
-
-    editButton.addEventListener("click", function () {
-      expenseAmountInput.value =
-        Number(expense.amount).toFixed(2);
-
+    editButton.addEventListener("click", () => {
+      expenseDescriptionInput.value = expense.description || "";
+      expenseAmountInput.value = Number(expense.amount).toFixed(2);
       categoryInput.value = expense.category;
+      expenseDateInput.value = expense.date || getTodayString();
       editingIndex = index;
       expenseSubmitButton.textContent = "Update Expense";
-
-      expenseAmountInput.focus();
+      focusExpenseForm();
     });
 
     const deleteButton = document.createElement("button");
     deleteButton.type = "button";
     deleteButton.className = "delete-button";
     deleteButton.textContent = "Delete";
-
-    deleteButton.addEventListener("click", function () {
+    deleteButton.addEventListener("click", () => {
       expenses.splice(index, 1);
 
       if (editingIndex === index) {
-        editingIndex = null;
-        expenseForm.reset();
-        expenseSubmitButton.textContent = "Add Expense";
+        resetExpenseForm();
       } else if (editingIndex > index) {
         editingIndex--;
       }
@@ -277,10 +310,11 @@ function renderExpenses() {
       saveCurrentMonth();
       renderExpenses();
       updateBudgetDisplay();
+      showMessage("Expense deleted.");
     });
 
-    expenseActions.append(editButton, deleteButton);
-    listItem.append(expenseInfo, expenseActions);
+    actions.append(editButton, deleteButton);
+    listItem.append(info, amount, menuButton, actions);
     expenseList.appendChild(listItem);
   });
 }
@@ -289,37 +323,26 @@ function renderCategoryBreakdown() {
   categoryBreakdown.innerHTML = "";
 
   if (expenses.length === 0) {
-    const emptyMessage = document.createElement("p");
-
-    emptyMessage.className = "empty-message";
-    emptyMessage.textContent =
-      "Add expenses to see your spending breakdown.";
-
-    categoryBreakdown.appendChild(emptyMessage);
+    const message = document.createElement("p");
+    message.className = "empty-message";
+    message.textContent = "Add expenses to see your spending breakdown.";
+    categoryBreakdown.appendChild(message);
     return;
   }
 
   const categoryTotals = {};
 
-  expenses.forEach(function (expense) {
-    const category = expense.category;
-    const amount = Number(expense.amount);
-
-    categoryTotals[category] =
-      (categoryTotals[category] || 0) + amount;
+  expenses.forEach((expense) => {
+    categoryTotals[expense.category] =
+      (categoryTotals[expense.category] || 0) + Number(expense.amount);
   });
 
-  const totalExpenses = expenses.reduce(function (total, expense) {
-    return total + Number(expense.amount);
-  }, 0);
+  const totalExpenses = getTotalExpenses();
 
-  Object.entries(categoryTotals).forEach(function (
-    [category, amount]
-  ) {
-    const percentage =
-      totalExpenses > 0
-        ? (amount / totalExpenses) * 100
-        : 0;
+  Object.entries(categoryTotals).forEach(([category, amount]) => {
+    const percentage = totalExpenses > 0
+      ? (amount / totalExpenses) * 100
+      : 0;
 
     const row = document.createElement("div");
     row.className = "category-row";
@@ -328,14 +351,13 @@ function renderCategoryBreakdown() {
     header.className = "category-header";
 
     const name = document.createElement("span");
-    name.textContent =
-      `${getCategoryIcon(category)} ${category}`;
+    name.textContent = `${getCategoryIcon(category)} ${category}`;
 
-    const amountDisplay = document.createElement("span");
-    amountDisplay.className = "category-amount";
-    amountDisplay.textContent = `$${amount.toFixed(2)}`;
+    const categoryAmount = document.createElement("span");
+    categoryAmount.className = "category-amount";
+    categoryAmount.textContent = `$${amount.toFixed(2)}`;
 
-    header.append(name, amountDisplay);
+    header.append(name, categoryAmount);
 
     const bar = document.createElement("div");
     bar.className = "category-bar";
@@ -350,7 +372,40 @@ function renderCategoryBreakdown() {
   });
 }
 
-incomeForm.addEventListener("submit", function (event) {
+function focusExpenseForm() {
+  expenseForm.scrollIntoView({ behavior: "smooth", block: "center" });
+  setTimeout(() => expenseDescriptionInput.focus(), 400);
+}
+
+function resetExpenseForm() {
+  editingIndex = null;
+  expenseForm.reset();
+  expenseDateInput.value = getTodayString();
+  expenseSubmitButton.textContent = "Add Expense";
+}
+
+let messageTimeout;
+
+function showMessage(message) {
+  let messageBox = document.querySelector("#app-message");
+
+  if (!messageBox) {
+    messageBox = document.createElement("div");
+    messageBox.id = "app-message";
+    messageBox.setAttribute("role", "status");
+    document.body.appendChild(messageBox);
+  }
+
+  messageBox.textContent = message;
+  messageBox.classList.add("visible");
+
+  clearTimeout(messageTimeout);
+  messageTimeout = setTimeout(() => {
+    messageBox.classList.remove("visible");
+  }, 2500);
+}
+
+incomeForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
   const income = Number(incomeInput.value);
@@ -368,82 +423,80 @@ incomeForm.addEventListener("submit", function (event) {
 
   monthlyIncome = income;
   monthlyBudgetLimit = budget;
-
   saveCurrentMonth();
   updateBudgetDisplay();
-
-  incomeInput.value = income.toFixed(2);
-  budgetLimitInput.value = budget.toFixed(2);
+  showMessage("Income and budget saved.");
 });
 
-expenseForm.addEventListener("submit", function (event) {
+expenseForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
+  const description = expenseDescriptionInput.value.trim();
   const amount = Number(expenseAmountInput.value);
   const category = categoryInput.value;
+  const date = expenseDateInput.value;
+
+  if (!description) {
+    alert("Please enter an expense description.");
+    return;
+  }
 
   if (!Number.isFinite(amount) || amount <= 0) {
     alert("Please enter an expense greater than zero.");
     return;
   }
 
-  if (category === "") {
+  if (!category) {
     alert("Please choose a category.");
     return;
   }
 
-  const expense = {
-    amount: amount,
-    category: category
-  };
+  if (!date) {
+    alert("Please choose an expense date.");
+    return;
+  }
+
+  const expense = { description, amount, category, date };
 
   if (editingIndex === null) {
     expenses.push(expense);
+    showMessage("Expense added successfully.");
   } else {
     expenses[editingIndex] = expense;
-    editingIndex = null;
+    showMessage("Expense updated successfully.");
   }
 
   saveCurrentMonth();
   renderExpenses();
   updateBudgetDisplay();
-
-  expenseForm.reset();
-  expenseSubmitButton.textContent = "Add Expense";
+  resetExpenseForm();
 });
 
-previousMonthButton.addEventListener("click", function () {
+previousMonthButton.addEventListener("click", () => {
   saveCurrentMonth();
-
-  selectedMonth.setMonth(
-    selectedMonth.getMonth() - 1
-  );
-
+  selectedMonth.setMonth(selectedMonth.getMonth() - 1);
   loadCurrentMonth();
 });
 
-nextMonthButton.addEventListener("click", function () {
+nextMonthButton.addEventListener("click", () => {
   saveCurrentMonth();
-
-  selectedMonth.setMonth(
-    selectedMonth.getMonth() + 1
-  );
-
+  selectedMonth.setMonth(selectedMonth.getMonth() + 1);
   loadCurrentMonth();
 });
 
 function saveSavingsGoals() {
-  localStorage.setItem(
-    "savings-goals",
-    JSON.stringify(savingsGoals)
-  );
+  localStorage.setItem("savings-goals", JSON.stringify(savingsGoals));
 }
 
 function loadSavingsGoals() {
   const savedGoals = localStorage.getItem("savings-goals");
 
   if (savedGoals) {
-    savingsGoals = JSON.parse(savedGoals);
+    try {
+      savingsGoals = JSON.parse(savedGoals);
+    } catch {
+      savingsGoals = [];
+    }
   } else {
     const oldGoal = localStorage.getItem("savings-goal");
 
@@ -460,27 +513,18 @@ function renderSavingsGoals() {
   savingsGoalsList.innerHTML = "";
 
   if (savingsGoals.length === 0) {
-    const emptyMessage = document.createElement("p");
-
-    emptyMessage.className = "empty-message";
-    emptyMessage.textContent =
-      "Add a savings goal to start tracking your progress.";
-
-    savingsGoalsList.appendChild(emptyMessage);
+    const message = document.createElement("p");
+    message.className = "empty-message";
+    message.textContent = "Add a savings goal to start tracking your progress.";
+    savingsGoalsList.appendChild(message);
     return;
   }
 
-  savingsGoals.forEach(function (goal, index) {
+  savingsGoals.forEach((goal, index) => {
     const target = Number(goal.target);
     const current = Number(goal.current);
-
-    const percentage =
-      target > 0 ? (current / target) * 100 : 0;
-
-    const displayedPercentage = Math.min(
-      Math.round(percentage),
-      100
-    );
+    const percentage = target > 0 ? (current / target) * 100 : 0;
+    const displayedPercentage = Math.min(Math.round(percentage), 100);
 
     const card = document.createElement("div");
     card.className = "savings-goal-card";
@@ -490,14 +534,8 @@ function renderSavingsGoals() {
 
     const amounts = document.createElement("div");
     amounts.className = "savings-amounts";
-
-    const saved = document.createElement("span");
-    saved.textContent = `$${current.toFixed(2)} saved`;
-
-    const goalAmount = document.createElement("span");
-    goalAmount.textContent = `Goal: $${target.toFixed(2)}`;
-
-    amounts.append(saved, goalAmount);
+    amounts.innerHTML = `<span>$${current.toFixed(2)} saved</span>` +
+      `<span>Goal: $${target.toFixed(2)}</span>`;
 
     const progressBar = document.createElement("div");
     progressBar.className = "savings-progress-bar";
@@ -505,26 +543,39 @@ function renderSavingsGoals() {
     const progressFill = document.createElement("div");
     progressFill.className = "savings-progress-fill";
     progressFill.style.width = `${displayedPercentage}%`;
-
     progressBar.appendChild(progressFill);
 
-    const percentageText = document.createElement("p");
-    percentageText.className = "savings-progress-percent";
-    percentageText.textContent =
-      `${displayedPercentage}% complete`;
+    const percent = document.createElement("p");
+    percent.className = "savings-progress-percent";
+    percent.textContent = `${displayedPercentage}% complete`;
 
-    const buttons = document.createElement("div");
-    buttons.className = "savings-buttons";
+    const menuButton = document.createElement("button");
+    menuButton.type = "button";
+    menuButton.className = "more-button";
+    menuButton.setAttribute("aria-label", `More options for ${goal.name}`);
+    menuButton.setAttribute("aria-expanded", "false");
+    menuButton.textContent = "•••";
+
+    const actions = document.createElement("div");
+    actions.className = "card-actions savings-buttons";
+    actions.hidden = true;
+
+    menuButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      closeActionMenus(actions);
+      actions.hidden = !actions.hidden;
+      actions.classList.toggle("is-open", !actions.hidden);
+      menuButton.setAttribute("aria-expanded", String(!actions.hidden));
+    });
 
     const editButton = document.createElement("button");
     editButton.type = "button";
+    editButton.className = "edit-button";
     editButton.textContent = "Edit";
-
-    editButton.addEventListener("click", function () {
+    editButton.addEventListener("click", () => {
       savingsNameInput.value = goal.name;
       savingsTargetInput.value = target.toFixed(2);
       savingsCurrentInput.value = current.toFixed(2);
-
       editingSavingsIndex = index;
       savingsSubmitButton.textContent = "Update Goal";
       savingsForm.hidden = false;
@@ -533,47 +584,37 @@ function renderSavingsGoals() {
 
     const deleteButton = document.createElement("button");
     deleteButton.type = "button";
-    deleteButton.textContent = "Delete";
     deleteButton.className = "delete-goal-button";
-
-    deleteButton.addEventListener("click", function () {
+    deleteButton.textContent = "Delete";
+    deleteButton.addEventListener("click", () => {
       savingsGoals.splice(index, 1);
-
       saveSavingsGoals();
       renderSavingsGoals();
+      showMessage("Savings goal deleted.");
     });
 
-    buttons.append(editButton, deleteButton);
-
-    card.append(
-      title,
-      amounts,
-      progressBar,
-      percentageText,
-      buttons
-    );
-
+    actions.append(editButton, deleteButton);
+    card.append(title, amounts, progressBar, percent, menuButton, actions);
     savingsGoalsList.appendChild(card);
   });
 }
 
-addSavingsGoalButton.addEventListener("click", function () {
+addSavingsGoalButton.addEventListener("click", () => {
   editingSavingsIndex = null;
-
   savingsForm.reset();
   savingsSubmitButton.textContent = "Save Goal";
   savingsForm.hidden = false;
   savingsNameInput.focus();
 });
 
-savingsForm.addEventListener("submit", function (event) {
+savingsForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
   const name = savingsNameInput.value.trim();
   const target = Number(savingsTargetInput.value);
   const current = Number(savingsCurrentInput.value);
 
-  if (name === "") {
+  if (!name) {
     alert("Please enter a savings goal name.");
     return;
   }
@@ -583,36 +624,32 @@ savingsForm.addEventListener("submit", function (event) {
     return;
   }
 
-  if (!Number.isFinite(current) || current < 0) {
-    alert("Please enter a valid saved amount.");
+  if (!Number.isFinite(current) || current < 0 || current > target) {
+    alert("Please enter a saved amount between $0 and the target amount.");
     return;
   }
 
-  if (current > target) {
-    alert("The amount saved cannot exceed the goal.");
-    return;
-  }
-
-  const goal = {
-    name: name,
-    target: target,
-    current: current
-  };
+  const goal = { name, target, current };
 
   if (editingSavingsIndex === null) {
     savingsGoals.push(goal);
+    showMessage("Savings goal added.");
   } else {
     savingsGoals[editingSavingsIndex] = goal;
-    editingSavingsIndex = null;
+    showMessage("Savings goal updated.");
   }
 
   saveSavingsGoals();
   renderSavingsGoals();
-
   savingsForm.reset();
   savingsForm.hidden = true;
   savingsSubmitButton.textContent = "Save Goal";
+  editingSavingsIndex = null;
 });
+
+if (emptyAddExpenseButton) {
+  emptyAddExpenseButton.addEventListener("click", focusExpenseForm);
+}
 
 loadCurrentMonth();
 loadSavingsGoals();

@@ -44,22 +44,22 @@
       <h2>Budget Summary</h2>
 
       <div class="summary-cards">
-        <div class="summary-card">
+        <div class="summary-card income-card">
           <h3>Income</h3>
           <p>$<span id="total-income">0.00</span></p>
         </div>
 
-        <div class="summary-card">
+        <div class="summary-card budget-card">
           <h3>Monthly Budget</h3>
           <p>$<span id="budget-limit-display">0.00</span></p>
         </div>
 
-        <div class="summary-card">
+        <div class="summary-card expense-card">
           <h3>Expenses</h3>
           <p>$<span id="total-expenses">0.00</span></p>
         </div>
 
-        <div class="summary-card">
+        <div class="summary-card remaining-card">
           <h3>Remaining</h3>
           <p>$<span id="remaining-budget">0.00</span></p>
         </div>
@@ -82,6 +82,7 @@
         <span id="budget-percent">Add budget</span>
       </div>
 
+      <p id="gauge-details" class="gauge-details">$0.00 spent of $0.00</p>
       <p class="gauge-label">Budget used</p>
 
       <p id="budget-status" aria-live="polite">
@@ -140,6 +141,16 @@
         <h2>Add Expense</h2>
 
         <form id="expense-form">
+          <label for="expense-description">Description:</label>
+
+          <input
+            type="text"
+            id="expense-description"
+            placeholder="Groceries or gas"
+            maxlength="60"
+            required
+          >
+
           <label for="expense-amount">Expense amount:</label>
 
           <div class="currency-input">
@@ -161,9 +172,16 @@
             <option value="Food">Food</option>
             <option value="Housing">Housing</option>
             <option value="Transportation">Transportation</option>
+            <option value="Bills">Bills</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Entertainment">Entertainment</option>
             <option value="School">School</option>
             <option value="Other">Other</option>
           </select>
+
+          <label for="expense-date">Date:</label>
+
+          <input type="date" id="expense-date" required>
 
           <button type="submit">Add Expense</button>
         </form>
@@ -233,7 +251,10 @@
 
       <ul id="expense-list">
         <li class="empty-message">
-          Your expenses will appear here after you add one.
+          <span>Add your first expense to see your progress.</span>
+          <button type="button" id="empty-add-expense-button" class="small-button">
+            Add Expense
+          </button>
         </li>
       </ul>
     </section>
