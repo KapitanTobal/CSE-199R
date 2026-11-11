@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Monthly Budget Dashboard</title>
+    <title>Subscriptions | Budget Dashboard</title>
   
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
   
     <meta name="theme-color" content="#007aff">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -23,14 +22,40 @@
     <nav>
         <a href="index.html">Budget</a>
         <a href="subscriptions.html">Subscriptions</a>
+        <a href="paycheck-planner.html">Paycheck Planner</a>
       </nav>
 
-      <section>
-        <h2>Track a Subscription</h2>
+      <header class="page-header">
+        <h1>Subscriptions</h1>
+        <p>Keep track of recurring payments and renewal dates.</p>
+      </header>
+
+      <main>
+      <section class="subscription-total-card">
+        <div>
+          <span class="summary-label">Monthly subscriptions</span>
+          <strong class="subscription-total-amount">
+            $<span id="subscription-total">0.00</span>
+          </strong>
+        </div>
+        <span class="subscription-total-icon" aria-hidden="true">↻</span>
+      </section>
+
+      <section class="subscription-form-card">
+        <h2>Add Subscription</h2>
+        <p class="section-description">
+          Add services, memberships, and other recurring payments.
+        </p>
       
         <form id="subscription-form">
           <label for="subscription-name">Subscription name:</label>
-          <input type="text" id="subscription-name" required>
+          <input
+            type="text"
+            id="subscription-name"
+            placeholder="Example: Netflix"
+            maxlength="60"
+            required
+          >
       
           <label for="subscription-amount">Amount:</label>
           <input
@@ -38,6 +63,7 @@
             id="subscription-amount"
             min="0.01"
             step="0.01"
+            placeholder="15.99"
             required
           >
       
@@ -60,11 +86,16 @@
         </form>
       </section>
       
-      <section>
-        <h2>Subscriptions</h2>
-        <p>Total monthly subscriptions: $<span id="subscription-total">0.00</span></p>
+      <section class="subscription-list-card">
+        <div class="section-heading-row">
+          <div>
+            <h2>Your Subscriptions</h2>
+            <p class="section-description">Upcoming recurring payments.</p>
+          </div>
+        </div>
         <ul id="subscription-list"></ul>
       </section>
+      </main>
 
       <script src="subscriptions.js"></script>
       <script src="pwa.js"></script>

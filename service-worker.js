@@ -1,16 +1,17 @@
-const CACHE_NAME = "budget-dashboard-v3";
+const CACHE_NAME = "budget-dashboard-v6";
 
 const APP_FILES = [
     "./",
     "./index.html",
     "./subscriptions.html",
+    "./paycheck-planner.html",
     "./style.css",
     "./script.js",
+    "./recurring.js",
+    "./paycheck-planner.js",
     "./subscriptions.js",
     "./pwa.js",
     "./manifest.json",
-    "./icons/icon-192.png",
-    "./icons/icon-512.png"
   ];
 
 self.addEventListener("install", function (event) {

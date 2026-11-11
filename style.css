@@ -692,6 +692,119 @@ form button {
   }
 }
 
+/* Paycheck Planner */
+
+.paycheck-planner-section {
+  border-top: 4px solid var(--blue);
+}
+
+.paycheck-summary {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--light-gray);
+}
+
+.paycheck-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.planner-card {
+  display: flex;
+  min-height: 82px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 15px;
+  background: var(--background);
+}
+
+.planner-card span {
+  color: var(--secondary-text);
+  font-size: 13px;
+}
+
+.planner-card strong {
+  font-size: 19px;
+}
+
+.safe-to-spend-card {
+  border: 2px solid var(--green);
+  background: #effaf1;
+}
+
+.paycheck-warning {
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.warning-safe {
+  background: #effaf1;
+  color: #207a3b;
+}
+
+.warning-caution {
+  background: #fff8df;
+  color: #936d00;
+}
+
+.warning-danger {
+  background: #fff0ef;
+  color: #b42318;
+}
+
+.paycheck-plans-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.paycheck-plan-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--background);
+}
+
+.paycheck-plan-details {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.paycheck-plan-details span {
+  color: var(--secondary-text);
+  font-size: 13px;
+}
+
+@media (max-width: 700px) {
+  .paycheck-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .paycheck-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .paycheck-plan-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .paycheck-plan-item .small-button {
+    align-self: flex-end;
+  }
+}
+
 /* Three-dot card menus */
 
 .expense-item,
@@ -766,5 +879,237 @@ form button {
   .expense-item > .card-actions {
     flex-basis: 100%;
     justify-content: flex-end;
+  }
+}
+
+#subscription-list {
+  padding: 0;
+  list-style: none;
+}
+
+.subscription-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 10px 0;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--background);
+}
+
+.subscription-information {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.subscription-information span {
+  color: var(--secondary-text);
+  font-size: 13px;
+}
+
+.subscription-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.subscription-buttons button {
+  min-height: 36px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+@media (max-width: 650px) {
+  .subscription-item {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .subscription-information {
+    flex-basis: calc(100% - 90px);
+  }
+
+  .subscription-item > strong {
+    margin-left: auto;
+  }
+
+  .subscription-buttons {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+.section-description {
+  margin-top: -8px;
+  margin-bottom: 20px;
+  color: var(--secondary-text);
+  font-size: 15px;
+}
+
+/* Subscription page */
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  margin-bottom: 8px;
+}
+
+.page-header p {
+  margin: 0;
+  color: var(--secondary-text);
+}
+
+.subscription-total-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 116px;
+  background: linear-gradient(135deg, #eaf4ff, #f7f9fc);
+  border: 1px solid #dbeeff;
+}
+
+.summary-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--secondary-text);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.subscription-total-amount {
+  display: block;
+  color: var(--text);
+  font-size: 32px;
+  letter-spacing: -1px;
+}
+
+.subscription-total-icon {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--blue);
+  color: white;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.subscription-form-card h2,
+.subscription-list-card h2 {
+  margin-bottom: 10px;
+}
+
+.subscription-form-card .section-description,
+.subscription-list-card .section-description {
+  margin-bottom: 20px;
+}
+
+.subscription-list-card {
+  min-height: 220px;
+}
+
+.section-heading-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+#subscription-list:empty::before {
+  display: block;
+  padding: 24px 12px;
+  border-radius: 14px;
+  background: var(--background);
+  color: var(--secondary-text);
+  content: "Your subscriptions will appear here after you add one.";
+  text-align: center;
+}
+
+.subscription-item {
+  border: 1px solid #e5e5ea;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.subscription-information strong {
+  color: var(--text);
+  font-size: 17px;
+}
+
+.subscription-buttons .edit-button,
+.subscription-buttons .delete-button {
+  min-width: 58px;
+}
+
+@media (max-width: 650px) {
+  .subscription-total-card,
+  .subscription-form-card,
+  .subscription-list-card {
+    padding: 20px;
+  }
+
+  .subscription-total-amount {
+    font-size: 28px;
+  }
+
+  .subscription-total-icon {
+    width: 46px;
+    height: 46px;
+    font-size: 24px;
+  }
+}
+
+.recurring-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.recurring-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--background);
+}
+
+.recurring-information {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.recurring-information strong {
+  color: var(--text);
+}
+
+.recurring-information span {
+  color: var(--secondary-text);
+  font-size: 13px;
+}
+
+.recurring-item .delete-button {
+  min-height: 38px;
+  padding: 7px 10px;
+  border-radius: 9px;
+  font-size: 12px;
+}
+
+@media (max-width: 650px) {
+  .recurring-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .recurring-item .delete-button {
+    align-self: flex-end;
   }
 }

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Paycheck Planner</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+
+  <meta name="theme-color" content="#007aff">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+</head>
+
+<body>
+  <nav>
+    <a href="index.html">Budget</a>
+    <a href="subscriptions.html">Subscriptions</a>
+    <a href="paycheck-planner.html" aria-current="page">
+      Paycheck Planner
+    </a>
+  </nav>
+
+  <header>
+    <h1>Paycheck Planner</h1>
+    <p>Plan your money until your next paycheck.</p>
+  </header>
+
+  <main>
+    <section class="paycheck-planner-section">
+      <h2>Paycheck Plan</h2>
+
+      <form id="paycheck-form">
+        <label for="current-balance">
+          Current available balance:
+        </label>
+
+        <div class="currency-input">
+          <span>$</span>
+          <input
+            type="number"
+            id="current-balance"
+            min="0"
+            step="0.01"
+            placeholder="500.00"
+            required
+          >
+        </div>
+
+        <label for="paycheck-name">
+          Income source:
+        </label>
+
+        <input
+          type="text"
+          id="paycheck-name"
+          placeholder="Work paycheck"
+          required
+        >
+
+        <label for="paycheck-amount">
+          Expected paycheck amount:
+        </label>
+
+        <div class="currency-input">
+          <span>$</span>
+          <input
+            type="number"
+            id="paycheck-amount"
+            min="0.01"
+            step="0.01"
+            placeholder="800.00"
+            required
+          >
+        </div>
+
+        <label for="paycheck-frequency">
+          Pay frequency:
+        </label>
+
+        <select id="paycheck-frequency" required>
+          <option value="">Choose a schedule</option>
+          <option value="weekly">Weekly</option>
+          <option value="biweekly">Every two weeks</option>
+          <option value="monthly">Monthly</option>
+        </select>
+
+        <label for="next-payday">
+          Next payday:
+        </label>
+
+        <input
+          type="date"
+          id="next-payday"
+          required
+        >
+
+        <label for="planned-savings">
+          Planned savings:
+        </label>
+
+        <div class="currency-input">
+          <span>$</span>
+          <input
+            type="number"
+            id="planned-savings"
+            min="0"
+            step="0.01"
+            value="0"
+            required
+          >
+        </div>
+
+        <button type="submit">
+          Save Paycheck Plan
+        </button>
+      </form>
+    </section>
+
+    <section id="paycheck-summary" class="paycheck-summary" hidden>
+      <h2>Safe-to-Spend Summary</h2>
+
+      <div class="paycheck-summary-grid">
+        <div class="planner-card">
+          <span>Next payday</span>
+          <strong id="display-next-payday">—</strong>
+        </div>
+
+        <div class="planner-card">
+          <span>Days remaining</span>
+          <strong id="display-days-remaining">0</strong>
+        </div>
+
+        <div class="planner-card">
+          <span>Expected income</span>
+          <strong>
+            $<span id="display-paycheck-amount">0.00</span>
+          </strong>
+        </div>
+
+        <div class="planner-card">
+          <span>Bills before payday</span>
+          <strong>
+            $<span id="display-bills-before-payday">0.00</span>
+          </strong>
+        </div>
+
+        <div class="planner-card safe-to-spend-card">
+          <span>Safe to spend</span>
+          <strong>
+            $<span id="display-safe-to-spend">0.00</span>
+          </strong>
+        </div>
+
+        <div class="planner-card">
+          <span>Daily allowance</span>
+          <strong>
+            $<span id="display-daily-allowance">0.00</span>
+          </strong>
+        </div>
+
+        <div class="planner-card">
+          <span>Lowest projected balance</span>
+          <strong>
+            $<span id="display-lowest-balance">0.00</span>
+          </strong>
+        </div>
+      </div>
+
+      <p
+        id="paycheck-warning"
+        class="paycheck-warning"
+        aria-live="polite">
+      </p>
+    </section>
+
+    <section>
+      <h2>Recurring Bills</h2>
+
+      <p class="section-description">
+        Add rent, utilities, car payments, or other repeating bills.
+      </p>
+
+      <form id="recurring-form">
+        <label for="recurring-type">
+          Transaction type:
+        </label>
+
+        <select id="recurring-type" required>
+          <option value="expense">Expense</option>
+          <option value="income">Income</option>
+        </select>
+
+        <label for="recurring-description">
+          Description:
+        </label>
+
+        <input
+          type="text"
+          id="recurring-description"
+          placeholder="Monthly rent"
+          required
+        >
+
+        <label for="recurring-amount">
+          Amount:
+        </label>
+
+        <div class="currency-input">
+          <span>$</span>
+          <input
+            type="number"
+            id="recurring-amount"
+            min="0.01"
+            step="0.01"
+            placeholder="800.00"
+            required
+          >
+        </div>
+
+        <label for="recurring-category">
+          Category:
+        </label>
+
+        <select id="recurring-category" required>
+          <option value="Housing">Housing</option>
+          <option value="Bills">Bills</option>
+          <option value="Transportation">
+            Transportation
+          </option>
+          <option value="Food">Food</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <label for="recurring-frequency">
+          Repeats:
+        </label>
+
+        <select id="recurring-frequency" required>
+          <option value="">Choose a schedule</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Biweekly">Every two weeks</option>
+          <option value="Monthly">Monthly</option>
+        </select>
+
+        <label for="recurring-start-date">
+          Next payment date:
+        </label>
+
+        <input
+          type="date"
+          id="recurring-start-date"
+          required
+        >
+
+        <button type="submit">
+          Add Recurring Bill
+        </button>
+      </form>
+
+      <div id="recurring-list" class="recurring-list">
+        <p class="empty-message">
+          Your recurring bills will appear here.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script src="recurring.js"></script>
+  <script src="paycheck-planner.js"></script>
+  <script src="pwa.js"></script>
+</body>
+</html>
