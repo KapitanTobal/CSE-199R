@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-  <title>Monthly Budget Dashboard</title>
+  <title>Budget Dashboard</title>
 
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
@@ -12,7 +15,10 @@
   <meta name="theme-color" content="#007aff">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
+  >
 </head>
 
 <body>
@@ -22,51 +28,79 @@
     <a href="paycheck-planner.html">Paycheck Planner</a>
   </nav>
 
-  <header>
-    <h1>Monthly Budget Dashboard</h1>
-    <p>Plan your money, track your spending, and stay within your budget.</p>
+  <header class="dashboard-header">
+    <div class="dashboard-header-top">
+      <div>
+        <h1>Hey, Aristotle</h1>
+        <p>Here is your money at a glance.</p>
+      </div>
+
+      <a
+        class="profile-button"
+        href="auth.html"
+        aria-label="Open account page">
+        <span aria-hidden="true">●</span>
+      </a>
+    </div>
   </header>
 
   <main>
     <section class="month-navigation">
-      <button type="button" id="previous-month" aria-label="Previous month">
+      <button
+        type="button"
+        id="previous-month"
+        aria-label="Previous month">
         &larr;
       </button>
 
       <h2 id="current-month"></h2>
 
-      <button type="button" id="next-month" aria-label="Next month">
+      <button
+        type="button"
+        id="next-month"
+        aria-label="Next month">
         &rarr;
       </button>
     </section>
 
     <section class="budget-summary">
-      <h2>Budget Summary</h2>
+      <h2>Available Balance</h2>
+
+      <p class="balance-label">
+        Remaining this month
+      </p>
+
+      <p class="balance-amount">
+        $<span id="remaining-budget">0.00</span>
+      </p>
 
       <div class="summary-cards">
         <div class="summary-card income-card">
           <h3>Income</h3>
-          <p>$<span id="total-income">0.00</span></p>
+          <p>
+            $<span id="total-income">0.00</span>
+          </p>
         </div>
 
         <div class="summary-card budget-card">
           <h3>Monthly Budget</h3>
-          <p>$<span id="budget-limit-display">0.00</span></p>
+          <p>
+            $<span id="budget-limit-display">0.00</span>
+          </p>
         </div>
 
         <div class="summary-card expense-card">
           <h3>Expenses</h3>
-          <p>$<span id="total-expenses">0.00</span></p>
-        </div>
-
-        <div class="summary-card remaining-card">
-          <h3>Remaining</h3>
-          <p>$<span id="remaining-budget">0.00</span></p>
+          <p>
+            $<span id="total-expenses">0.00</span>
+          </p>
         </div>
       </div>
 
       <div class="budget-gauge">
-        <svg viewBox="0 0 200 120" aria-label="Budget usage">
+        <svg
+          viewBox="0 0 200 120"
+          aria-label="Budget usage">
           <path
             class="gauge-background"
             d="M20 100 A80 80 0 0 1 180 100">
@@ -79,18 +113,29 @@
           </path>
         </svg>
 
-        <span id="budget-percent">Add budget</span>
+        <span id="budget-percent">
+          Add budget
+        </span>
       </div>
 
-      <p id="gauge-details" class="gauge-details">$0.00 spent of $0.00</p>
-      <p class="gauge-label">Budget used</p>
+      <p
+        id="gauge-details"
+        class="gauge-details">
+        $0.00 spent of $0.00
+      </p>
 
-      <p id="budget-status" aria-live="polite">
+      <p class="gauge-label">
+        Budget used
+      </p>
+
+      <p
+        id="budget-status"
+        aria-live="polite">
         Enter your income and monthly budget to begin.
       </p>
     </section>
 
-    <section>
+    <section class="category-section">
       <h2>Spending by Category</h2>
 
       <div id="category-breakdown">
@@ -100,15 +145,59 @@
       </div>
     </section>
 
+    <section class="recent-transactions-section">
+      <div class="section-heading-row">
+        <div>
+          <h2>Recent Transactions</h2>
+
+          <p class="section-description">
+            Your latest recorded expenses.
+          </p>
+        </div>
+
+        <a
+          class="see-all-link"
+          href="#expense-list">
+          See all
+        </a>
+      </div>
+
+      <ul id="expense-list">
+        <li class="empty-message expense-empty-state">
+          <span>
+            Add your first expense to see your progress.
+          </span>
+
+          <button
+            type="button"
+            id="empty-add-expense-button"
+            class="small-button">
+            Add Expense
+          </button>
+        </li>
+      </ul>
+    </section>
+
     <div class="form-grid">
-      <section>
+      <section class="income-entry-section">
+        <button
+          type="button"
+          id="close-income-modal"
+          class="modal-close-button"
+          aria-label="Close income form">
+          ×
+        </button>
+      
         <h2>Monthly Income</h2>
 
         <form id="income-form">
-          <label for="income">Income amount:</label>
+          <label for="income">
+            Income amount:
+          </label>
 
           <div class="currency-input">
             <span>$</span>
+
             <input
               type="number"
               id="income"
@@ -119,10 +208,13 @@
             >
           </div>
 
-          <label for="budget-limit">Monthly budget:</label>
+          <label for="budget-limit">
+            Monthly budget:
+          </label>
 
           <div class="currency-input">
             <span>$</span>
+
             <input
               type="number"
               id="budget-limit"
@@ -133,15 +225,27 @@
             >
           </div>
 
-          <button type="submit">Save Income &amp; Budget</button>
+          <button type="submit">
+            Save Income &amp; Budget
+          </button>
         </form>
       </section>
 
-      <section>
+      <section class="expense-entry-section">
+        <button
+          type="button"
+          id="close-expense-modal"
+          class="modal-close-button"
+          aria-label="Close add expense form">
+          ×
+        </button>
+
         <h2>Add Expense</h2>
 
         <form id="expense-form">
-          <label for="expense-description">Description:</label>
+          <label for="expense-description">
+            Description:
+          </label>
 
           <input
             type="text"
@@ -151,10 +255,13 @@
             required
           >
 
-          <label for="expense-amount">Expense amount:</label>
+          <label for="expense-amount">
+            Expense amount:
+          </label>
 
           <div class="currency-input">
             <span>$</span>
+
             <input
               type="number"
               id="expense-amount"
@@ -165,25 +272,61 @@
             >
           </div>
 
-          <label for="category">Category:</label>
+          <label for="category">
+            Category:
+          </label>
 
           <select id="category" required>
-            <option value="">Choose a category</option>
-            <option value="Food">Food</option>
-            <option value="Housing">Housing</option>
-            <option value="Transportation">Transportation</option>
-            <option value="Bills">Bills</option>
-            <option value="Shopping">Shopping</option>
-            <option value="Entertainment">Entertainment</option>
-            <option value="School">School</option>
-            <option value="Other">Other</option>
+            <option value="">
+              Choose a category
+            </option>
+
+            <option value="Food">
+              Food
+            </option>
+
+            <option value="Housing">
+              Housing
+            </option>
+
+            <option value="Transportation">
+              Transportation
+            </option>
+
+            <option value="Bills">
+              Bills
+            </option>
+
+            <option value="Shopping">
+              Shopping
+            </option>
+
+            <option value="Entertainment">
+              Entertainment
+            </option>
+
+            <option value="School">
+              School
+            </option>
+
+            <option value="Other">
+              Other
+            </option>
           </select>
 
-          <label for="expense-date">Date:</label>
+          <label for="expense-date">
+            Date:
+          </label>
 
-          <input type="date" id="expense-date" required>
+          <input
+            type="date"
+            id="expense-date"
+            required
+          >
 
-          <button type="submit">Add Expense</button>
+          <button type="submit">
+            Add Expense
+          </button>
         </form>
       </section>
     </div>
@@ -205,7 +348,9 @@
       </button>
 
       <form id="savings-form" hidden>
-        <label for="savings-name">Goal name:</label>
+        <label for="savings-name">
+          Goal name:
+        </label>
 
         <input
           type="text"
@@ -214,10 +359,13 @@
           required
         >
 
-        <label for="savings-target">Target amount:</label>
+        <label for="savings-target">
+          Target amount:
+        </label>
 
         <div class="currency-input">
           <span>$</span>
+
           <input
             type="number"
             id="savings-target"
@@ -227,10 +375,13 @@
           >
         </div>
 
-        <label for="savings-current">Amount saved:</label>
+        <label for="savings-current">
+          Amount saved:
+        </label>
 
         <div class="currency-input">
           <span>$</span>
+
           <input
             type="number"
             id="savings-current"
@@ -240,27 +391,171 @@
           >
         </div>
 
-        <button type="submit" id="savings-submit-button">
+        <button
+          type="submit"
+          id="savings-submit-button">
           Save Goal
         </button>
       </form>
     </section>
-
-    <section>
-      <h2>Expense History</h2>
-
-      <ul id="expense-list">
-        <li class="empty-message">
-          <span>Add your first expense to see your progress.</span>
-          <button type="button" id="empty-add-expense-button" class="small-button">
-            Add Expense
-          </button>
-        </li>
-      </ul>
-    </section>
   </main>
 
+  <!-- Add action menu -->
+  <div
+    id="add-action-sheet"
+    class="action-sheet"
+    hidden>
+
+    <div
+      class="action-sheet-backdrop"
+      id="close-action-sheet">
+    </div>
+
+    <div class="action-sheet-panel">
+      <div class="sheet-handle"></div>
+
+      <h2>
+        What would you like to add?
+      </h2>
+
+      <button
+        type="button"
+        id="choose-add-expense"
+        class="sheet-action-button">
+        Add Expense
+      </button>
+
+      <button
+        type="button"
+        id="choose-add-savings"
+        class="sheet-action-button">
+        Add Money to Savings
+      </button>
+
+      <button
+        type="button"
+        id="choose-add-income"
+        class="sheet-action-button">
+        Add Income &amp; Budget
+      </button>
+
+      <button
+        type="button"
+        id="cancel-add-action"
+        class="sheet-cancel-button">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+  <!-- Add savings money form -->
+  <div
+    id="add-savings-sheet"
+    class="action-sheet"
+    hidden>
+
+    <div
+      class="action-sheet-backdrop"
+      id="close-savings-sheet">
+    </div>
+
+    <div class="action-sheet-panel">
+      <div class="sheet-handle"></div>
+
+      <h2>
+        Add Money to Savings
+      </h2>
+
+      <form id="quick-savings-form">
+        <label for="quick-savings-goal">
+          Savings goal:
+        </label>
+
+        <select
+          id="quick-savings-goal"
+          required>
+        </select>
+
+        <label for="quick-savings-amount">
+          Amount to add:
+        </label>
+
+        <div class="currency-input">
+          <span>$</span>
+
+          <input
+            type="number"
+            id="quick-savings-amount"
+            min="0.01"
+            step="0.01"
+            placeholder="50.00"
+            required
+          >
+        </div>
+
+        <button type="submit">
+          Add Money
+        </button>
+
+        <button
+          type="button"
+          id="cancel-savings-sheet"
+          class="outline-button">
+          Cancel
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Mobile navigation -->
+  <nav
+    class="mobile-bottom-nav"
+    aria-label="Mobile navigation">
+
+    <a
+      href="index.html"
+      class="active"
+      aria-label="Budget">
+      <span aria-hidden="true">⌂</span>
+      <small>Budget</small>
+    </a>
+
+    <a
+      href="subscriptions.html"
+      aria-label="Subscriptions">
+      <span aria-hidden="true">▣</span>
+      <small>Subscriptions</small>
+    </a>
+
+    <button
+      type="button"
+      id="quick-add-expense-button"
+      class="quick-add-button"
+      aria-label="Add">
+      <span aria-hidden="true">+</span>
+    </button>
+
+    <a
+      href="paycheck-planner.html"
+      aria-label="Paycheck Planner">
+      <span aria-hidden="true">▥</span>
+      <small>Planner</small>
+    </a>
+
+    <a
+      href="auth.html"
+      aria-label="Account">
+      <span aria-hidden="true">●</span>
+      <small>Account</small>
+    </a>
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
   <script src="script.js"></script>
+  <script src="auth-guard.js"></script>
+  <script src="budget-actions.js"></script>
+  <script src="savings-cloud.js"></script>
   <script src="pwa.js"></script>
 </body>
 </html>

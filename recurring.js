@@ -13,15 +13,166 @@ const recurringStartDate = document.querySelector(
 );
 const recurringList = document.querySelector("#recurring-list");
 
-let recurringTransactions = JSON.parse(
-  localStorage.getItem("recurring-transactions") || "[]"
-);
+let recurringTransactions = [];
 
-function saveRecurringTransactions() {
+async function getRecurringUser() {
+  const { data, error } =
+    await supabaseClient.auth.getUser();
+
+  if (error) {
+    console.error("Could not get user:", error);
+    return null;
+  }
+
+  return data.user;
+}
+
+function getLocalRecurringTransactions() {
+  try {
+    const saved = JSON.parse(
+      localStorage.getItem(
+        "recurring-transactions"
+      ) || "[]"
+    );
+
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+}
+
+async function migrateLocalRecurringTransactions(user) {
+  const migrationKey =
+    `recurring-migrated-${user.id}`;
+
+  if (localStorage.getItem(migrationKey)) {
+    return;
+  }
+
+  const localTransactions =
+    getLocalRecurringTransactions();
+
+  const { data: existing, error } =
+    await supabaseClient
+      .from("recurring_transactions")
+      .select("id")
+      .eq("user_id", user.id);
+
+  if (error) {
+    console.error(
+      "Could not check recurring transactions:",
+      error
+    );
+
+    return;
+  }
+
+  if (
+    (!existing || existing.length === 0) &&
+    localTransactions.length > 0
+  ) {
+    const transactionsToInsert =
+      localTransactions.map(function (transaction) {
+        return {
+          user_id: user.id,
+          transaction_type:
+            transaction.type || "expense",
+          description:
+            transaction.description || "Recurring transaction",
+          amount: Number(transaction.amount) || 0,
+          category:
+            transaction.category || "Other",
+          frequency:
+            transaction.frequency || "Monthly",
+          start_date:
+            transaction.startDate ||
+            new Date().toISOString().slice(0, 10),
+          active: transaction.active !== false
+        };
+      });
+
+    const { error: insertError } =
+      await supabaseClient
+        .from("recurring_transactions")
+        .insert(transactionsToInsert);
+
+    if (insertError) {
+      console.error(
+        "Could not migrate recurring transactions:",
+        insertError
+      );
+
+      return;
+    }
+
+    alert(
+      "Your recurring transactions were imported."
+    );
+  }
+
+  localStorage.setItem(migrationKey, "true");
+}
+
+async function loadRecurringTransactions() {
+  const user = await getRecurringUser();
+
+  if (!user) {
+    recurringTransactions = [];
+    renderRecurringTransactions();
+    return;
+  }
+
+  await migrateLocalRecurringTransactions(user);
+
+  const { data, error } =
+    await supabaseClient
+      .from("recurring_transactions")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("start_date", {
+        ascending: true
+      });
+
+  if (error) {
+    console.error(
+      "Could not load recurring transactions:",
+      error
+    );
+
+    recurringList.innerHTML = `
+      <p class="empty-message">
+        Unable to load recurring transactions.
+      </p>
+    `;
+
+    return;
+  }
+
+  recurringTransactions = (data || []).map(
+    function (transaction) {
+      return {
+        id: transaction.id,
+        type: transaction.transaction_type,
+        description: transaction.description,
+        amount: Number(transaction.amount),
+        category: transaction.category,
+        frequency: transaction.frequency,
+        startDate: transaction.start_date,
+        active: transaction.active
+      };
+    }
+  );
+
+  /*
+    Keep a local copy so Paycheck Planner can
+    continue reading recurring transactions.
+  */
   localStorage.setItem(
     "recurring-transactions",
     JSON.stringify(recurringTransactions)
   );
+
+  renderRecurringTransactions();
 }
 
 function renderRecurringTransactions() {
@@ -38,12 +189,13 @@ function renderRecurringTransactions() {
     return;
   }
 
-  recurringTransactions.forEach(function (transaction, index) {
+  recurringTransactions.forEach(function (transaction) {
     const item = document.createElement("div");
     item.className = "recurring-item";
 
     const information = document.createElement("div");
-    information.className = "recurring-information";
+    information.className =
+      "recurring-information";
 
     const title = document.createElement("strong");
     title.textContent = transaction.description;
@@ -60,12 +212,34 @@ function renderRecurringTransactions() {
     deleteButton.className = "delete-button";
     deleteButton.textContent = "Delete";
 
-    deleteButton.addEventListener("click", function () {
-      recurringTransactions.splice(index, 1);
+    deleteButton.addEventListener(
+      "click",
+      async function () {
+        const confirmed = confirm(
+          `Delete "${transaction.description}"?`
+        );
 
-      saveRecurringTransactions();
-      renderRecurringTransactions();
-    });
+        if (!confirmed) {
+          return;
+        }
+
+        const { error } =
+          await supabaseClient
+            .from("recurring_transactions")
+            .delete()
+            .eq("id", transaction.id);
+
+        if (error) {
+          console.error(error);
+          alert(
+            "Unable to delete recurring transaction."
+          );
+          return;
+        }
+
+        await loadRecurringTransactions();
+      }
+    );
 
     information.append(title, details);
     item.append(information, deleteButton);
@@ -73,56 +247,80 @@ function renderRecurringTransactions() {
   });
 }
 
-recurringForm.addEventListener("submit", function (event) {
-  event.preventDefault();
+recurringForm.addEventListener(
+  "submit",
+  async function (event) {
+    event.preventDefault();
 
-  const transaction = {
-    id: Date.now(),
-    type: recurringType.value,
-    description: recurringDescription.value.trim(),
-    amount: Number(recurringAmount.value),
-    category: recurringCategory.value,
-    frequency: recurringFrequency.value,
-    startDate: recurringStartDate.value,
-    active: true
-  };
+    const user = await getRecurringUser();
 
-  if (transaction.type === "") {
-    alert("Please choose a transaction type.");
-    return;
+    if (!user) {
+      alert(
+        "Please log in before saving a recurring transaction."
+      );
+      return;
+    }
+
+    const transactionType = recurringType.value;
+    const description =
+      recurringDescription.value.trim();
+    const amount = Number(recurringAmount.value);
+    const category = recurringCategory.value;
+    const frequency = recurringFrequency.value;
+    const startDate = recurringStartDate.value;
+
+    if (!transactionType) {
+      alert("Please choose a transaction type.");
+      return;
+    }
+
+    if (!description) {
+      alert("Please enter a description.");
+      return;
+    }
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      alert("Please enter a valid amount.");
+      return;
+    }
+
+    if (!frequency) {
+      alert("Please choose a schedule.");
+      return;
+    }
+
+    if (!startDate) {
+      alert("Please choose a starting date.");
+      return;
+    }
+
+    const { error } =
+      await supabaseClient
+        .from("recurring_transactions")
+        .insert({
+          user_id: user.id,
+          transaction_type: transactionType,
+          description,
+          amount,
+          category,
+          frequency,
+          start_date: startDate,
+          active: true
+        });
+
+    if (error) {
+      console.error(error);
+      alert(
+        "Unable to save recurring transaction."
+      );
+      return;
+    }
+
+    recurringForm.reset();
+    await loadRecurringTransactions();
+
+    alert("Recurring transaction saved.");
   }
+);
 
-  if (transaction.description === "") {
-    alert("Please enter a description.");
-    return;
-  }
-
-  if (
-    !Number.isFinite(transaction.amount) ||
-    transaction.amount <= 0
-  ) {
-    alert("Please enter a valid amount.");
-    return;
-  }
-
-  if (transaction.frequency === "") {
-    alert("Please choose a schedule.");
-    return;
-  }
-
-  if (transaction.startDate === "") {
-    alert("Please choose a starting date.");
-    return;
-  }
-
-  recurringTransactions.push(transaction);
-
-  saveRecurringTransactions();
-  renderRecurringTransactions();
-
-  recurringForm.reset();
-
-  alert("Recurring transaction saved.");
-});
-
-renderRecurringTransactions();
+loadRecurringTransactions();

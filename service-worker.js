@@ -1,15 +1,19 @@
-const CACHE_NAME = "budget-dashboard-v6";
+const CACHE_NAME = "budget-dashboard-v8";
 
 const APP_FILES = [
     "./",
     "./index.html",
     "./subscriptions.html",
     "./paycheck-planner.html",
+    "./auth.html",
     "./style.css",
     "./script.js",
     "./recurring.js",
     "./paycheck-planner.js",
     "./subscriptions.js",
+    "./subscription-ui.js",
+    "./auth.js",
+    "./supabase-config.js",
     "./pwa.js",
     "./manifest.json",
   ];

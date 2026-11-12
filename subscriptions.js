@@ -7,28 +7,10 @@ const autopayInput = document.querySelector("#autopay");
 
 const subscriptionList = document.querySelector("#subscription-list");
 const totalDisplay = document.querySelector("#subscription-total");
+const submitButton = subscriptionForm.querySelector("button[type='submit']");
 
-let subscriptions = readSubscriptions();
-let editingIndex = null;
-
-function readSubscriptions() {
-  try {
-    const saved = JSON.parse(
-      localStorage.getItem("subscriptions") || "[]"
-    );
-
-    return Array.isArray(saved) ? saved : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveSubscriptions() {
-  localStorage.setItem(
-    "subscriptions",
-    JSON.stringify(subscriptions)
-  );
-}
+let subscriptions = [];
+let editingId = null;
 
 function monthlyAmount(subscription) {
   const amount = Number(subscription.amount) || 0;
@@ -38,20 +20,72 @@ function monthlyAmount(subscription) {
     : amount;
 }
 
+function showEmptyMessage(message) {
+  subscriptionList.innerHTML = "";
+
+  const emptyMessage = document.createElement("li");
+  emptyMessage.className = "empty-message";
+  emptyMessage.textContent = message;
+
+  subscriptionList.appendChild(emptyMessage);
+}
+
+async function getCurrentUser() {
+  const { data, error } = await supabaseClient.auth.getUser();
+
+  if (error) {
+    console.error("Unable to get user:", error);
+    return null;
+  }
+
+  return data.user;
+}
+
+async function loadSubscriptions() {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    showEmptyMessage("Please log in to view your subscriptions.");
+    return;
+  }
+
+  const { data, error } = await supabaseClient
+    .from("subscriptions")
+    .select("*")
+    .order("next_payment", { ascending: true });
+
+  if (error) {
+    console.error("Could not load subscriptions:", error);
+    showEmptyMessage("Unable to load subscriptions.");
+    return;
+  }
+
+  subscriptions = data.map(function (subscription) {
+    return {
+      id: subscription.id,
+      name: subscription.name,
+      amount: Number(subscription.amount),
+      billingCycle: subscription.billing_cycle,
+      nextPayment: subscription.next_payment,
+      autopay: subscription.autopay
+    };
+  });
+
+  renderSubscriptions();
+}
+
 function renderSubscriptions() {
   subscriptionList.innerHTML = "";
 
   if (subscriptions.length === 0) {
-    const emptyMessage = document.createElement("li");
-    emptyMessage.className = "empty-message";
-    emptyMessage.textContent =
-      "Your subscriptions will appear here after you add one.";
-    subscriptionList.appendChild(emptyMessage);
+    showEmptyMessage("Your subscriptions will appear here after you add one.");
+    totalDisplay.textContent = "0.00";
+    return;
   }
 
   let total = 0;
 
-  subscriptions.forEach(function (subscription, index) {
+  subscriptions.forEach(function (subscription) {
     total += monthlyAmount(subscription);
 
     const item = document.createElement("li");
@@ -65,7 +99,7 @@ function renderSubscriptions() {
 
     const details = document.createElement("span");
     details.textContent =
-      `$${Number(subscription.amount).toFixed(2)} ` +
+      `$${subscription.amount.toFixed(2)} ` +
       `${subscription.billingCycle} • ` +
       `Next payment: ${subscription.nextPayment} • ` +
       `${subscription.autopay ? "Autopay on" : "Autopay off"}`;
@@ -83,11 +117,13 @@ function renderSubscriptions() {
       amountInput.value = subscription.amount;
       cycleInput.value = subscription.billingCycle;
       dateInput.value = subscription.nextPayment;
-      autopayInput.checked = Boolean(subscription.autopay);
-      editingIndex = index;
-      subscriptionForm.querySelector("button[type='submit']").textContent =
-        "Update Subscription";
+      autopayInput.checked = subscription.autopay;
+
+      editingId = subscription.id;
+      submitButton.textContent = "Update Subscription";
+
       nameInput.focus();
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
     const deleteButton = document.createElement("button");
@@ -95,11 +131,33 @@ function renderSubscriptions() {
     deleteButton.className = "delete-button";
     deleteButton.textContent = "Delete";
 
-    deleteButton.addEventListener("click", function () {
-      subscriptions.splice(index, 1);
-      editingIndex = null;
-      saveSubscriptions();
-      renderSubscriptions();
+    deleteButton.addEventListener("click", async function () {
+      const confirmed = confirm(
+        `Delete "${subscription.name}"?`
+      );
+
+      if (!confirmed) {
+        return;
+      }
+
+      const { error } = await supabaseClient
+        .from("subscriptions")
+        .delete()
+        .eq("id", subscription.id);
+
+      if (error) {
+        alert("Unable to delete subscription.");
+        console.error(error);
+        return;
+      }
+
+      if (editingId === subscription.id) {
+        editingId = null;
+        subscriptionForm.reset();
+        submitButton.textContent = "Add Subscription";
+      }
+
+      await loadSubscriptions();
     });
 
     information.append(name, details);
@@ -111,8 +169,15 @@ function renderSubscriptions() {
   totalDisplay.textContent = total.toFixed(2);
 }
 
-subscriptionForm.addEventListener("submit", function (event) {
+subscriptionForm.addEventListener("submit", async function (event) {
   event.preventDefault();
+
+  const user = await getCurrentUser();
+
+  if (!user) {
+    alert("Please log in before saving a subscription.");
+    return;
+  }
 
   const name = nameInput.value.trim();
   const amount = Number(amountInput.value);
@@ -140,29 +205,45 @@ subscriptionForm.addEventListener("submit", function (event) {
     return;
   }
 
-  const subscription = {
-    id: editingIndex === null
-      ? Date.now()
-      : subscriptions[editingIndex].id || Date.now(),
+  const subscriptionData = {
     name,
     amount,
-    billingCycle,
-    nextPayment,
+    billing_cycle: billingCycle,
+    next_payment: nextPayment,
     autopay
   };
 
-  if (editingIndex === null) {
-    subscriptions.push(subscription);
+  let result;
+
+  if (editingId) {
+    result = await supabaseClient
+      .from("subscriptions")
+      .update(subscriptionData)
+      .eq("id", editingId)
+      .select()
+      .single();
   } else {
-    subscriptions[editingIndex] = subscription;
-    editingIndex = null;
+    result = await supabaseClient
+      .from("subscriptions")
+      .insert({
+        ...subscriptionData,
+        user_id: user.id
+      })
+      .select()
+      .single();
   }
 
-  saveSubscriptions();
-  renderSubscriptions();
+  if (result.error) {
+    alert("Unable to save subscription.");
+    console.error(result.error);
+    return;
+  }
+
+  editingId = null;
   subscriptionForm.reset();
-  subscriptionForm.querySelector("button[type='submit']").textContent =
-    "Add Subscription";
+  submitButton.textContent = "Add Subscription";
+
+  await loadSubscriptions();
 });
 
-renderSubscriptions();
+loadSubscriptions();

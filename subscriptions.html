@@ -43,6 +43,14 @@
 
       <section class="subscription-form-card">
         <h2>Add Subscription</h2>
+
+        <button
+          type="button"
+          id="close-subscription-modal"
+          class="modal-close-button"
+          aria-label="Close add subscription form">
+          ×
+        </button>
         <p class="section-description">
           Add services, memberships, and other recurring payments.
         </p>
@@ -97,7 +105,37 @@
       </section>
       </main>
 
+      <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+        <a href="index.html" aria-label="Budget">
+          <span aria-hidden="true">⌂</span>
+          <small>Budget</small>
+        </a>
+
+        <a href="subscriptions.html" class="active" aria-label="Subscriptions">
+          <span aria-hidden="true">▣</span>
+          <small>Subscriptions</small>
+        </a>
+
+        <a href="#subscription-form" id="quick-add-subscription-button" class="quick-add-button" aria-label="Add subscription">
+          <span aria-hidden="true">+</span>
+        </a>
+
+        <a href="paycheck-planner.html" aria-label="Paycheck Planner">
+          <span aria-hidden="true">▥</span>
+          <small>Planner</small>
+        </a>
+
+        <a href="auth.html" aria-label="Account">
+          <span aria-hidden="true">●</span>
+          <small>Account</small>
+        </a>
+      </nav>
+
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+      <script src="supabase-config.js"></script>
+      <script src="auth-guard.js"></script>
       <script src="subscriptions.js"></script>
+      <script src="subscription-ui.js"></script>
       <script src="pwa.js"></script>
     
 </body>
