@@ -777,7 +777,7 @@ form button {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    min-height: 68px;
+    min-height: 76px;
     padding: 8px 10px;
     border: 1px solid rgba(209, 209, 214, 0.9);
     border-radius: 24px;
@@ -1853,4 +1853,18 @@ body.sheet-open {
   .income-entry-section h2 {
     padding-right: 42px;
   }
+}
+
+main {
+  padding-bottom: 120px;
+}
+
+.mobile-bottom-nav {
+  bottom: env(safe-area-inset-bottom, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.budget-summary {
+
+  padding-bottom: 110px;
 }
