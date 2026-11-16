@@ -1868,3 +1868,24 @@ main {
 
   padding-bottom: 110px;
 }
+
+/* Mobile bottom navigation fix */
+.mobile-bottom-nav {
+  height: 76px;
+  min-height: 76px;
+  padding: 8px 12px;
+  bottom: calc(10px + env(safe-area-inset-bottom));
+}
+
+.mobile-bottom-nav a,
+.mobile-bottom-nav button {
+  min-height: 52px;
+}
+
+.budget-summary {
+  margin-bottom: 105px;
+}
+
+main {
+  padding-bottom: 100px;
+}
