@@ -1889,3 +1889,21 @@ main {
 main {
   padding-bottom: 100px;
 }
+
+.savings-buttons {
+  display: none;
+  position: relative;
+  z-index: 20;
+}
+
+.savings-buttons.is-open {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.savings-buttons button {
+  position: relative;
+  z-index: 21;
+  pointer-events: auto;
+}

@@ -102,10 +102,15 @@ function formatSavingsMoney(amount) {
   return Number(amount || 0).toFixed(2);
 }
 
-function closeSavingsMenus(except) {
+function closeSavingsMenus() {
   document.querySelectorAll(".savings-buttons").forEach(function (menu) {
-    if (menu !== except) {
-      menu.hidden = true;
+    menu.hidden = true;
+    menu.classList.remove("is-open");
+
+    const button = menu.previousElementSibling;
+
+    if (button) {
+      button.setAttribute("aria-expanded", "false");
     }
   });
 }
@@ -197,56 +202,70 @@ function renderCloudSavingsGoals() {
     actions.className = "card-actions savings-buttons";
     actions.hidden = true;
 
-    menuButton.addEventListener("click", function () {
-      closeSavingsMenus(actions);
-      actions.hidden = !actions.hidden;
+    menuButton.setAttribute("aria-expanded", "false");
+
+    menuButton.addEventListener("click", function (event) {
+      event.stopPropagation();
+
+      const shouldOpen = actions.hidden;
+
+      closeSavingsMenus();
+
+      actions.hidden = !shouldOpen;
+      actions.classList.toggle("is-open", shouldOpen);
+
+      menuButton.setAttribute(
+        "aria-expanded",
+        String(shouldOpen)
+      );
     });
-
-    const editButton = document.createElement("button");
-    editButton.type = "button";
-    editButton.className = "edit-button";
-    editButton.textContent = "Edit";
-
-    editButton.addEventListener("click", function () {
-      cloudEditingGoalId = goal.id;
-      cloudSavingsName.value = goal.name;
-      cloudSavingsTarget.value = goal.target;
-      cloudSavingsCurrent.value = goal.current;
-      cloudSavingsSubmit.textContent = "Update Goal";
-      cloudSavingsForm.hidden = false;
-      cloudSavingsName.focus();
-    });
-
-    const deleteButton = document.createElement("button");
-    deleteButton.type = "button";
-    deleteButton.className = "delete-goal-button";
-    deleteButton.textContent = "Delete";
-
-    deleteButton.addEventListener("click", async function () {
-      if (!confirm(`Delete "${goal.name}"?`)) return;
-
-      const { error } = await supabaseClient
-        .from("savings_goals")
-        .delete()
-        .eq("id", goal.id);
-
-      if (error) {
-        console.error(error);
-        alert("Unable to delete savings goal.");
-        return;
-      }
-
-      await loadCloudSavingsGoals();
-
-      if (typeof showMessage === "function") {
-        showMessage("Savings goal deleted.");
-      }
-    });
-
-    actions.append(editButton, deleteButton);
-    card.append(title, amounts, progressBar, percent, menuButton, actions);
-    cloudSavingsList.appendChild(card);
   });
+
+  const editButton = document.createElement("button");
+  editButton.type = "button";
+  editButton.className = "edit-button";
+  editButton.textContent = "Edit";
+
+  editButton.addEventListener("click", function () {
+    cloudEditingGoalId = goal.id;
+    cloudSavingsName.value = goal.name;
+    cloudSavingsTarget.value = goal.target;
+    cloudSavingsCurrent.value = goal.current;
+    cloudSavingsSubmit.textContent = "Update Goal";
+    cloudSavingsForm.hidden = false;
+    cloudSavingsName.focus();
+  });
+
+  const deleteButton = document.createElement("button");
+  deleteButton.type = "button";
+  deleteButton.className = "delete-goal-button";
+  deleteButton.textContent = "Delete";
+
+  deleteButton.addEventListener("click", async function () {
+    if (!confirm(`Delete "${goal.name}"?`)) return;
+
+    const { error } = await supabaseClient
+      .from("savings_goals")
+      .delete()
+      .eq("id", goal.id);
+
+    if (error) {
+      console.error(error);
+      alert("Unable to delete savings goal.");
+      return;
+    }
+
+    await loadCloudSavingsGoals();
+
+    if (typeof showMessage === "function") {
+      showMessage("Savings goal deleted.");
+    }
+  });
+
+  actions.append(editButton, deleteButton);
+  card.append(title, amounts, progressBar, percent, menuButton, actions);
+  cloudSavingsList.appendChild(card);
+});
 }
 
 function populateCloudSavingsSelect() {
