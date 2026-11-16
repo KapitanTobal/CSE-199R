@@ -1907,3 +1907,64 @@ main {
   z-index: 21;
   pointer-events: auto;
 }
+
+/* Fix savings goal Edit/Delete menu */
+.savings-goal-card {
+  position: relative;
+  overflow: visible;
+}
+
+.savings-goal-card .savings-buttons:not([hidden]) {
+  display: flex !important;
+  justify-content: flex-end;
+  gap: 8px;
+  position: relative;
+  z-index: 100;
+}
+
+.savings-goal-card .savings-buttons button {
+  display: inline-flex !important;
+  position: relative;
+  z-index: 101;
+  pointer-events: auto;
+  min-height: 38px;
+  padding: 8px 12px;
+}
+
+.savings-goal-card .more-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 102;
+  pointer-events: auto;
+}
+
+.savings-goal-card {
+  position: relative;
+  overflow: visible;
+}
+
+.savings-goal-card .savings-buttons:not([hidden]) {
+  display: flex !important;
+  justify-content: flex-end;
+  gap: 8px;
+  position: relative;
+  z-index: 100;
+}
+
+.savings-goal-card .savings-buttons button {
+  display: inline-flex !important;
+  position: relative;
+  z-index: 101;
+  pointer-events: auto;
+  min-height: 38px;
+  padding: 8px 12px;
+}
+
+.savings-goal-card .more-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 102;
+  pointer-events: auto;
+}
