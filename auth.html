@@ -25,10 +25,16 @@
     <section class="auth-card">
       <h2>Account</h2>
 
-      <form id="auth-form">
+        <form id="auth-form" method="post">
         <label for="email">Email address:</label>
 
-        <input type="email" id="email" placeholder="you@example.com" required>
+        <input
+          type="email"
+          id="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+        >
 
         <label for="password">Password:</label>
 
@@ -54,32 +60,6 @@
       </button>
     </section>
   </main>
-
-  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
-    <a href="index.html" aria-label="Budget">
-      <span aria-hidden="true">⌂</span>
-      <small>Budget</small>
-    </a>
-
-    <a href="subscriptions.html" aria-label="Subscriptions">
-      <span aria-hidden="true">▣</span>
-      <small>Subscriptions</small>
-    </a>
-
-    <a href="index.html#expense-form" class="quick-add-button" aria-label="Add expense">
-      <span aria-hidden="true">+</span>
-    </a>
-
-    <a href="paycheck-planner.html" aria-label="Paycheck Planner">
-      <span aria-hidden="true">▥</span>
-      <small>Planner</small>
-    </a>
-
-    <a href="auth.html" class="active" aria-label="Account">
-      <span aria-hidden="true">●</span>
-      <small>Account</small>
-    </a>
-  </nav>
 
   <script src="auth.js"></script>
 </body>
