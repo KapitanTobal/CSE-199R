@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,16 +12,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
 
-  
+
 </head>
 
-<body>
-  <nav>
-    <a href="index.html">Budget</a>
-    <a href="subscriptions.html">Subscriptions</a>
-    <a href="paycheck-planner.html">Paycheck Planner</a>
-  </nav>
-
+<body class="auth-page">
   <header class="page-header">
     <h1>Welcome Back</h1>
     <p>Log in or create an account to save your budget securely.</p>
@@ -33,29 +28,22 @@
       <form id="auth-form">
         <label for="email">Email address:</label>
 
-        <input
-          type="email"
-          id="email"
-          placeholder="you@example.com"
-          required
-        >
+        <input type="email" id="email" placeholder="you@example.com" required>
 
         <label for="password">Password:</label>
 
-        <input
-          type="password"
-          id="password"
-          placeholder="At least 6 characters"
-          minlength="6"
-          required
-        >
-
+        <input type="password" id="password" placeholder="At least 8 characters" minlength="8"
+          autocomplete="current-password" required>
         <button type="submit" id="login-button">
           Log In
         </button>
 
         <button type="button" id="signup-button" class="outline-button">
           Create Account
+        </button>
+
+        <button type="button" id="forgot-password-button" class="text-button">
+          Forgot password?
         </button>
       </form>
 
@@ -95,4 +83,5 @@
 
   <script src="auth.js"></script>
 </body>
+
 </html>
