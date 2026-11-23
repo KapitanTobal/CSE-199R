@@ -1,98 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  >
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <title>Settings | Budget Dashboard</title>
+    <title>Settings | Budget Dashboard</title>
 
-  <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
 
-  <meta name="theme-color" content="#007aff">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta
-    name="apple-mobile-web-app-status-bar-style"
-    content="default"
-  >
+    <meta name="theme-color" content="#087ff5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Budget">
 </head>
 
 <body class="settings-page">
-  <header class="page-header">
-    <h1>Settings</h1>
-    <p>Manage your account and app preferences.</p>
-  </header>
+    <header class="page-header">
+        <h1>Settings</h1>
+        <p>Manage your account and app preferences.</p>
+    </header>
 
-  <main>
-    <section class="settings-card">
-      <h2>Account</h2>
+    <main>
+        <section class="settings-card">
+            <h2>Account</h2>
 
-      <p class="settings-label">Signed in as:</p>
-      <p id="settings-email" class="settings-email">
-        Loading account...
-      </p>
+            <p class="settings-label">Signed in as:</p>
+            <p id="settings-email" class="settings-email">
+                Loading account...
+            </p>
 
-      <button
-        type="button"
-        id="settings-logout-button"
-        class="delete-button">
-        Log Out
-      </button>
-    </section>
+            <button type="button" id="settings-logout-button" class="delete-button">
+                Log Out
+            </button>
+        </section>
 
-    <section class="settings-card">
-      <h2>About</h2>
-      <p class="settings-description">
-        Student Budget Dashboard helps you track your money,
-        subscriptions, savings, and paychecks.
-      </p>
-    </section>
-  </main>
+        <section class="settings-card">
+            <h2>About</h2>
+            <p class="settings-description">
+                Student Budget Dashboard helps you track your money,
+                subscriptions, savings, and paychecks.
+            </p>
+        </section>
+    </main>
 
-  <nav
-    class="mobile-bottom-nav"
-    aria-label="Mobile navigation">
+    <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
 
-    <a href="index.html" aria-label="Budget">
-      <span aria-hidden="true">⌂</span>
-      <small>Budget</small>
-    </a>
+        <a href="index.html" aria-label="Budget">
+            <span aria-hidden="true">⌂</span>
+            <small>Budget</small>
+        </a>
 
-    <a href="subscriptions.html" aria-label="Subscriptions">
-      <span aria-hidden="true">▣</span>
-      <small>Subscriptions</small>
-    </a>
+        <a href="subscriptions.html" aria-label="Subscriptions">
+            <span aria-hidden="true">▣</span>
+            <small>Subscriptions</small>
+        </a>
 
-    <a
-      href="index.html"
-      class="quick-add-button"
-      aria-label="Add">
-      +
-    </a>
+        <a href="index.html" class="quick-add-button" aria-label="Add">
+            +
+        </a>
 
-    <a href="paycheck-planner.html" aria-label="Planner">
-      <span aria-hidden="true">▥</span>
-      <small>Planner</small>
-    </a>
+        <a href="paycheck-planner.html" aria-label="Planner">
+            <span aria-hidden="true">▥</span>
+            <small>Planner</small>
+        </a>
 
-    <a
-      href="settings.html"
-      class="active"
-      aria-current="page"
-      aria-label="Settings">
-      <span aria-hidden="true">⚙</span>
-      <small>Settings</small>
-    </a>
-  </nav>
+        <a href="settings.html" class="active" aria-current="page" aria-label="Settings">
+            <span aria-hidden="true">⚙</span>
+            <small>Settings</small>
+        </a>
+    </nav>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
-  <script src="auth-guard.js"></script>
-  <script src="settings.js"></script>
-  <script src="pwa.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="auth-guard.js"></script>
+    <script src="settings.js"></script>
+    <script src="pwa.js"></script>
 </body>
+
 </html>

@@ -1,145 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta
-  name="viewport"
-  content="width=device-width, initial-scale=1, viewport-fit=cover"
-  >
-  
-    <title>Subscriptions | Budget Dashboard</title>
-  
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-  
-    <meta name="theme-color" content="#007aff">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta
-      name="apple-mobile-web-app-status-bar-style"
-      content="default"
-    >
-  </head>
-  
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <title>Subscriptions | Budget Dashboard</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+  <meta name="theme-color" content="#087ff5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Budget">
+</head>
+
 <body>
-    <nav>
-        <a href="index.html">Budget</a>
-        <a href="subscriptions.html">Subscriptions</a>
-        <a href="paycheck-planner.html">Paycheck Planner</a>
-      </nav>
+  <nav>
+    <a href="index.html">Budget</a>
+    <a href="subscriptions.html">Subscriptions</a>
+    <a href="paycheck-planner.html">Paycheck Planner</a>
+  </nav>
 
-      <header class="page-header">
-        <h1>Subscriptions</h1>
-        <p>Keep track of recurring payments and renewal dates.</p>
-      </header>
+  <header class="page-header">
+    <h1>Subscriptions</h1>
+    <p>Keep track of recurring payments and renewal dates.</p>
+  </header>
 
-      <main>
-      <section class="subscription-total-card">
+  <main>
+    <section class="subscription-total-card">
+      <div>
+        <span class="summary-label">Monthly subscriptions</span>
+        <strong class="subscription-total-amount">
+          $<span id="subscription-total">0.00</span>
+        </strong>
+      </div>
+      <span class="subscription-total-icon" aria-hidden="true">↻</span>
+    </section>
+
+    <section class="subscription-form-card">
+      <h2>Add Subscription</h2>
+
+      <button type="button" id="close-subscription-modal" class="modal-close-button"
+        aria-label="Close add subscription form">
+        ×
+      </button>
+      <p class="section-description">
+        Add services, memberships, and other recurring payments.
+      </p>
+
+      <form id="subscription-form">
+        <label for="subscription-name">Subscription name:</label>
+        <input type="text" id="subscription-name" placeholder="Example: Netflix" maxlength="60" required>
+
+        <label for="subscription-amount">Amount:</label>
+        <input type="number" id="subscription-amount" min="0.01" step="0.01" placeholder="15.99" required>
+
+        <label for="billing-cycle">Billing cycle:</label>
+        <select id="billing-cycle" required>
+          <option value="">Choose a cycle</option>
+          <option value="Monthly">Monthly</option>
+          <option value="Yearly">Yearly</option>
+        </select>
+
+        <label for="next-payment">Next payment date:</label>
+        <input type="date" id="next-payment" required>
+
+        <label>
+          <input type="checkbox" id="autopay">
+          Automatic payment
+        </label>
+
+        <button type="submit">Add Subscription</button>
+      </form>
+    </section>
+
+    <section class="subscription-list-card">
+      <div class="section-heading-row">
         <div>
-          <span class="summary-label">Monthly subscriptions</span>
-          <strong class="subscription-total-amount">
-            $<span id="subscription-total">0.00</span>
-          </strong>
+          <h2>Your Subscriptions</h2>
+          <p class="section-description">Upcoming recurring payments.</p>
         </div>
-        <span class="subscription-total-icon" aria-hidden="true">↻</span>
-      </section>
+      </div>
+      <ul id="subscription-list"></ul>
+    </section>
+  </main>
 
-      <section class="subscription-form-card">
-        <h2>Add Subscription</h2>
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="index.html" aria-label="Budget">
+      <span aria-hidden="true">⌂</span>
+      <small>Budget</small>
+    </a>
 
-        <button
-          type="button"
-          id="close-subscription-modal"
-          class="modal-close-button"
-          aria-label="Close add subscription form">
-          ×
-        </button>
-        <p class="section-description">
-          Add services, memberships, and other recurring payments.
-        </p>
-      
-        <form id="subscription-form">
-          <label for="subscription-name">Subscription name:</label>
-          <input
-            type="text"
-            id="subscription-name"
-            placeholder="Example: Netflix"
-            maxlength="60"
-            required
-          >
-      
-          <label for="subscription-amount">Amount:</label>
-          <input
-            type="number"
-            id="subscription-amount"
-            min="0.01"
-            step="0.01"
-            placeholder="15.99"
-            required
-          >
-      
-          <label for="billing-cycle">Billing cycle:</label>
-          <select id="billing-cycle" required>
-            <option value="">Choose a cycle</option>
-            <option value="Monthly">Monthly</option>
-            <option value="Yearly">Yearly</option>
-          </select>
-      
-          <label for="next-payment">Next payment date:</label>
-          <input type="date" id="next-payment" required>
-      
-          <label>
-            <input type="checkbox" id="autopay">
-            Automatic payment
-          </label>
-      
-          <button type="submit">Add Subscription</button>
-        </form>
-      </section>
-      
-      <section class="subscription-list-card">
-        <div class="section-heading-row">
-          <div>
-            <h2>Your Subscriptions</h2>
-            <p class="section-description">Upcoming recurring payments.</p>
-          </div>
-        </div>
-        <ul id="subscription-list"></ul>
-      </section>
-      </main>
+    <a href="subscriptions.html" class="active" aria-label="Subscriptions">
+      <span aria-hidden="true">▣</span>
+      <small>Subscriptions</small>
+    </a>
 
-      <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
-        <a href="index.html" aria-label="Budget">
-          <span aria-hidden="true">⌂</span>
-          <small>Budget</small>
-        </a>
+    <a href="#subscription-form" id="quick-add-subscription-button" class="quick-add-button"
+      aria-label="Add subscription">
+      <span aria-hidden="true">+</span>
+    </a>
 
-        <a href="subscriptions.html" class="active" aria-label="Subscriptions">
-          <span aria-hidden="true">▣</span>
-          <small>Subscriptions</small>
-        </a>
+    <a href="paycheck-planner.html" aria-label="Paycheck Planner">
+      <span aria-hidden="true">▥</span>
+      <small>Planner</small>
+    </a>
 
-        <a href="#subscription-form" id="quick-add-subscription-button" class="quick-add-button" aria-label="Add subscription">
-          <span aria-hidden="true">+</span>
-        </a>
+    <a href="settings.html" aria-label="Settings">
+      <span aria-hidden="true">⚙</span>
+      <small>Settings</small>
+    </a>
+  </nav>
 
-        <a href="paycheck-planner.html" aria-label="Paycheck Planner">
-          <span aria-hidden="true">▥</span>
-          <small>Planner</small>
-        </a>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="auth-guard.js"></script>
+  <script src="subscriptions.js"></script>
+  <script src="subscription-ui.js"></script>
+  <script src="pwa.js"></script>
 
-        <a href="settings.html" aria-label="Settings">
-          <span aria-hidden="true">⚙</span>
-          <small>Settings</small>
-        </a>
-      </nav>
-
-      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-      <script src="supabase-config.js"></script>
-      <script src="auth-guard.js"></script>
-      <script src="subscriptions.js"></script>
-      <script src="subscription-ui.js"></script>
-      <script src="pwa.js"></script>
-    
 </body>
+
 </html>

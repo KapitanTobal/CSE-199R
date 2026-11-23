@@ -1,24 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta
-  name="viewport"
-  content="width=device-width, initial-scale=1, viewport-fit=cover"
- >
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <title>Budget Dashboard</title>
 
-  <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
 
-  <meta name="theme-color" content="#007aff">
-  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#087ff5">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta
-    name="apple-mobile-web-app-status-bar-style"
-    content="default"
-  >
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Budget">
 </head>
 
 <body>
@@ -35,10 +30,7 @@
         <p>Here is your money at a glance.</p>
       </div>
 
-      <a
-        class="profile-button"
-        href="auth.html"
-        aria-label="Open account page">
+      <a class="profile-button" href="auth.html" aria-label="Open account page">
         <span aria-hidden="true">●</span>
       </a>
     </div>
@@ -46,19 +38,13 @@
 
   <main>
     <section class="month-navigation">
-      <button
-        type="button"
-        id="previous-month"
-        aria-label="Previous month">
+      <button type="button" id="previous-month" aria-label="Previous month">
         &larr;
       </button>
 
       <h2 id="current-month"></h2>
 
-      <button
-        type="button"
-        id="next-month"
-        aria-label="Next month">
+      <button type="button" id="next-month" aria-label="Next month">
         &rarr;
       </button>
     </section>
@@ -98,18 +84,11 @@
       </div>
 
       <div class="budget-gauge">
-        <svg
-          viewBox="0 0 200 120"
-          aria-label="Budget usage">
-          <path
-            class="gauge-background"
-            d="M20 100 A80 80 0 0 1 180 100">
+        <svg viewBox="0 0 200 120" aria-label="Budget usage">
+          <path class="gauge-background" d="M20 100 A80 80 0 0 1 180 100">
           </path>
 
-          <path
-            id="gauge-progress"
-            class="gauge-progress"
-            d="M20 100 A80 80 0 0 1 180 100">
+          <path id="gauge-progress" class="gauge-progress" d="M20 100 A80 80 0 0 1 180 100">
           </path>
         </svg>
 
@@ -118,9 +97,7 @@
         </span>
       </div>
 
-      <p
-        id="gauge-details"
-        class="gauge-details">
+      <p id="gauge-details" class="gauge-details">
         $0.00 spent of $0.00
       </p>
 
@@ -128,9 +105,7 @@
         Budget used
       </p>
 
-      <p
-        id="budget-status"
-        aria-live="polite">
+      <p id="budget-status" aria-live="polite">
         Enter your income and monthly budget to begin.
       </p>
     </section>
@@ -155,9 +130,7 @@
           </p>
         </div>
 
-        <a
-          class="see-all-link"
-          href="#expense-list">
+        <a class="see-all-link" href="#expense-list">
           See all
         </a>
       </div>
@@ -168,10 +141,7 @@
             Add your first expense to see your progress.
           </span>
 
-          <button
-            type="button"
-            id="empty-add-expense-button"
-            class="small-button">
+          <button type="button" id="empty-add-expense-button" class="small-button">
             Add Expense
           </button>
         </li>
@@ -180,14 +150,10 @@
 
     <div class="form-grid">
       <section class="income-entry-section">
-        <button
-          type="button"
-          id="close-income-modal"
-          class="modal-close-button"
-          aria-label="Close income form">
+        <button type="button" id="close-income-modal" class="modal-close-button" aria-label="Close income form">
           ×
         </button>
-      
+
         <h2>Monthly Income</h2>
 
         <form id="income-form">
@@ -198,14 +164,7 @@
           <div class="currency-input">
             <span>$</span>
 
-            <input
-              type="number"
-              id="income"
-              min="0.01"
-              step="0.01"
-              placeholder="520.00"
-              required
-            >
+            <input type="number" id="income" min="0.01" step="0.01" placeholder="520.00" required>
           </div>
 
           <label for="budget-limit">
@@ -215,14 +174,7 @@
           <div class="currency-input">
             <span>$</span>
 
-            <input
-              type="number"
-              id="budget-limit"
-              min="0.01"
-              step="0.01"
-              placeholder="500.00"
-              required
-            >
+            <input type="number" id="budget-limit" min="0.01" step="0.01" placeholder="500.00" required>
           </div>
 
           <button type="submit">
@@ -232,11 +184,7 @@
       </section>
 
       <section class="expense-entry-section">
-        <button
-          type="button"
-          id="close-expense-modal"
-          class="modal-close-button"
-          aria-label="Close add expense form">
+        <button type="button" id="close-expense-modal" class="modal-close-button" aria-label="Close add expense form">
           ×
         </button>
 
@@ -247,13 +195,7 @@
             Description:
           </label>
 
-          <input
-            type="text"
-            id="expense-description"
-            placeholder="Groceries or gas"
-            maxlength="60"
-            required
-          >
+          <input type="text" id="expense-description" placeholder="Groceries or gas" maxlength="60" required>
 
           <label for="expense-amount">
             Expense amount:
@@ -262,14 +204,7 @@
           <div class="currency-input">
             <span>$</span>
 
-            <input
-              type="number"
-              id="expense-amount"
-              min="0.01"
-              step="0.01"
-              placeholder="Enter expense"
-              required
-            >
+            <input type="number" id="expense-amount" min="0.01" step="0.01" placeholder="Enter expense" required>
           </div>
 
           <label for="category">
@@ -318,11 +253,7 @@
             Date:
           </label>
 
-          <input
-            type="date"
-            id="expense-date"
-            required
-          >
+          <input type="date" id="expense-date" required>
 
           <button type="submit">
             Add Expense
@@ -340,10 +271,7 @@
         </p>
       </div>
 
-      <button
-        type="button"
-        id="add-savings-goal-button"
-        class="outline-button">
+      <button type="button" id="add-savings-goal-button" class="outline-button">
         Add Savings Goal
       </button>
 
@@ -352,12 +280,7 @@
           Goal name:
         </label>
 
-        <input
-          type="text"
-          id="savings-name"
-          placeholder="Emergency Fund"
-          required
-        >
+        <input type="text" id="savings-name" placeholder="Emergency Fund" required>
 
         <label for="savings-target">
           Target amount:
@@ -366,13 +289,7 @@
         <div class="currency-input">
           <span>$</span>
 
-          <input
-            type="number"
-            id="savings-target"
-            min="0.01"
-            step="0.01"
-            required
-          >
+          <input type="number" id="savings-target" min="0.01" step="0.01" required>
         </div>
 
         <label for="savings-current">
@@ -382,18 +299,10 @@
         <div class="currency-input">
           <span>$</span>
 
-          <input
-            type="number"
-            id="savings-current"
-            min="0"
-            step="0.01"
-            required
-          >
+          <input type="number" id="savings-current" min="0" step="0.01" required>
         </div>
 
-        <button
-          type="submit"
-          id="savings-submit-button">
+        <button type="submit" id="savings-submit-button">
           Save Goal
         </button>
       </form>
@@ -401,14 +310,9 @@
   </main>
 
   <!-- Add action menu -->
-  <div
-    id="add-action-sheet"
-    class="action-sheet"
-    hidden>
+  <div id="add-action-sheet" class="action-sheet" hidden>
 
-    <div
-      class="action-sheet-backdrop"
-      id="close-action-sheet">
+    <div class="action-sheet-backdrop" id="close-action-sheet">
     </div>
 
     <div class="action-sheet-panel">
@@ -418,45 +322,28 @@
         What would you like to add?
       </h2>
 
-      <button
-        type="button"
-        id="choose-add-expense"
-        class="sheet-action-button">
+      <button type="button" id="choose-add-expense" class="sheet-action-button">
         Add Expense
       </button>
 
-      <button
-        type="button"
-        id="choose-add-savings"
-        class="sheet-action-button">
+      <button type="button" id="choose-add-savings" class="sheet-action-button">
         Add Money to Savings
       </button>
 
-      <button
-        type="button"
-        id="choose-add-income"
-        class="sheet-action-button">
+      <button type="button" id="choose-add-income" class="sheet-action-button">
         Add Income &amp; Budget
       </button>
 
-      <button
-        type="button"
-        id="cancel-add-action"
-        class="sheet-cancel-button">
+      <button type="button" id="cancel-add-action" class="sheet-cancel-button">
         Cancel
       </button>
     </div>
   </div>
 
   <!-- Add savings money form -->
-  <div
-    id="add-savings-sheet"
-    class="action-sheet"
-    hidden>
+  <div id="add-savings-sheet" class="action-sheet" hidden>
 
-    <div
-      class="action-sheet-backdrop"
-      id="close-savings-sheet">
+    <div class="action-sheet-backdrop" id="close-savings-sheet">
     </div>
 
     <div class="action-sheet-panel">
@@ -471,9 +358,7 @@
           Savings goal:
         </label>
 
-        <select
-          id="quick-savings-goal"
-          required>
+        <select id="quick-savings-goal" required>
         </select>
 
         <label for="quick-savings-amount">
@@ -483,24 +368,14 @@
         <div class="currency-input">
           <span>$</span>
 
-          <input
-            type="number"
-            id="quick-savings-amount"
-            min="0.01"
-            step="0.01"
-            placeholder="50.00"
-            required
-          >
+          <input type="number" id="quick-savings-amount" min="0.01" step="0.01" placeholder="50.00" required>
         </div>
 
         <button type="submit">
           Add Money
         </button>
 
-        <button
-          type="button"
-          id="cancel-savings-sheet"
-          class="outline-button">
+        <button type="button" id="cancel-savings-sheet" class="outline-button">
           Cancel
         </button>
       </form>
@@ -508,36 +383,23 @@
   </div>
 
   <!-- Mobile navigation -->
-  <nav
-    class="mobile-bottom-nav"
-    aria-label="Mobile navigation">
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
 
-    <a
-      href="index.html"
-      class="active"
-      aria-label="Budget">
+    <a href="index.html" class="active" aria-label="Budget">
       <span aria-hidden="true">⌂</span>
       <small>Budget</small>
     </a>
 
-    <a
-      href="subscriptions.html"
-      aria-label="Subscriptions">
+    <a href="subscriptions.html" aria-label="Subscriptions">
       <span aria-hidden="true">▣</span>
       <small>Subscriptions</small>
     </a>
 
-    <button
-      type="button"
-      id="quick-add-expense-button"
-      class="quick-add-button"
-      aria-label="Add">
+    <button type="button" id="quick-add-expense-button" class="quick-add-button" aria-label="Add">
       <span aria-hidden="true">+</span>
     </button>
 
-    <a
-      href="paycheck-planner.html"
-      aria-label="Paycheck Planner">
+    <a href="paycheck-planner.html" aria-label="Paycheck Planner">
       <span aria-hidden="true">▥</span>
       <small>Planner</small>
     </a>
@@ -557,4 +419,5 @@
   <script src="savings-cloud.js"></script>
   <script src="pwa.js"></script>
 </body>
+
 </html>

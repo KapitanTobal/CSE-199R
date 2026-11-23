@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta
-  name="viewport"
-  content="width=device-width, initial-scale=1, viewport-fit=cover"
- >
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Paycheck Planner</title>
 
-  <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
 
-  <meta name="theme-color" content="#007aff">
-  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#087ff5">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Budget">
 </head>
 
 <body>
@@ -42,26 +40,14 @@
 
         <div class="currency-input">
           <span>$</span>
-          <input
-            type="number"
-            id="current-balance"
-            min="0"
-            step="0.01"
-            placeholder="500.00"
-            required
-          >
+          <input type="number" id="current-balance" min="0" step="0.01" placeholder="500.00" required>
         </div>
 
         <label for="paycheck-name">
           Income source:
         </label>
 
-        <input
-          type="text"
-          id="paycheck-name"
-          placeholder="Work paycheck"
-          required
-        >
+        <input type="text" id="paycheck-name" placeholder="Work paycheck" required>
 
         <label for="paycheck-amount">
           Expected paycheck amount:
@@ -69,14 +55,7 @@
 
         <div class="currency-input">
           <span>$</span>
-          <input
-            type="number"
-            id="paycheck-amount"
-            min="0.01"
-            step="0.01"
-            placeholder="800.00"
-            required
-          >
+          <input type="number" id="paycheck-amount" min="0.01" step="0.01" placeholder="800.00" required>
         </div>
 
         <label for="paycheck-frequency">
@@ -94,11 +73,7 @@
           Next payday:
         </label>
 
-        <input
-          type="date"
-          id="next-payday"
-          required
-        >
+        <input type="date" id="next-payday" required>
 
         <label for="planned-savings">
           Planned savings:
@@ -106,14 +81,7 @@
 
         <div class="currency-input">
           <span>$</span>
-          <input
-            type="number"
-            id="planned-savings"
-            min="0"
-            step="0.01"
-            value="0"
-            required
-          >
+          <input type="number" id="planned-savings" min="0" step="0.01" value="0" required>
         </div>
 
         <button type="submit">
@@ -172,10 +140,7 @@
         </div>
       </div>
 
-      <p
-        id="paycheck-warning"
-        class="paycheck-warning"
-        aria-live="polite">
+      <p id="paycheck-warning" class="paycheck-warning" aria-live="polite">
       </p>
     </section>
 
@@ -200,12 +165,7 @@
           Description:
         </label>
 
-        <input
-          type="text"
-          id="recurring-description"
-          placeholder="Monthly rent"
-          required
-        >
+        <input type="text" id="recurring-description" placeholder="Monthly rent" required>
 
         <label for="recurring-amount">
           Amount:
@@ -213,14 +173,7 @@
 
         <div class="currency-input">
           <span>$</span>
-          <input
-            type="number"
-            id="recurring-amount"
-            min="0.01"
-            step="0.01"
-            placeholder="800.00"
-            required
-          >
+          <input type="number" id="recurring-amount" min="0.01" step="0.01" placeholder="800.00" required>
         </div>
 
         <label for="recurring-category">
@@ -252,11 +205,7 @@
           Next payment date:
         </label>
 
-        <input
-          type="date"
-          id="recurring-start-date"
-          required
-        >
+        <input type="date" id="recurring-start-date" required>
 
         <button type="submit">
           Add Recurring Bill
@@ -304,4 +253,5 @@
   <script src="paycheck-planner.js"></script>
   <script src="pwa.js"></script>
 </body>
+
 </html>
