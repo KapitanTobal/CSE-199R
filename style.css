@@ -1156,3 +1156,69 @@ body.expense-modal-open .mobile-bottom-nav {
     transform: translateX(50%);
   }
 }
+
+/* Subscription form bottom sheet */
+
+.subscription-form-card {
+  display: none;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 250;
+  width: min(100%, 560px);
+  max-height: 88vh;
+  margin: 0 auto;
+  overflow-y: auto;
+  padding: 24px 20px
+    calc(28px + env(safe-area-inset-bottom));
+  border-radius: 28px 28px 0 0;
+  background: var(--card);
+  box-shadow: 0 -12px 35px rgba(0, 0, 0, 0.2);
+}
+
+body.subscription-modal-open::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 240;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+body.subscription-modal-open
+  .subscription-form-card {
+  display: block;
+}
+
+body.subscription-modal-open {
+  overflow: hidden;
+}
+
+body.subscription-modal-open
+  .mobile-bottom-nav {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.subscription-form-card
+  .modal-close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+.subscription-form-card h2,
+.subscription-form-card p {
+  padding-right: 48px;
+}
+
+@media (min-width: 700px) {
+  .subscription-form-card {
+    right: 50%;
+    bottom: 24px;
+    left: auto;
+    width: min(520px, calc(100% - 40px));
+    border-radius: 26px;
+    transform: translateX(50%);
+  }
+}
