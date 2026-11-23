@@ -11,14 +11,19 @@ const budgetLimitInput = document.querySelector("#budget-limit");
 const budgetLimitDisplay = document.querySelector("#budget-limit-display");
 
 const expenseForm = document.querySelector("#expense-form");
-const expenseDescriptionInput = document.querySelector("#expense-description");
+const expenseDescriptionInput = document.querySelector(
+  "#expense-description"
+);
 const expenseAmountInput = document.querySelector("#expense-amount");
 const categoryInput = document.querySelector("#category");
 const expenseDateInput = document.querySelector("#expense-date");
 const totalExpensesDisplay = document.querySelector("#total-expenses");
-const remainingBudgetDisplay = document.querySelector("#remaining-budget");
+const remainingBudgetDisplay = document.querySelector(
+  "#remaining-budget"
+);
 const budgetStatus = document.querySelector("#budget-status");
 const expenseList = document.querySelector("#expense-list");
+
 const expenseSubmitButton = expenseForm.querySelector(
   'button[type="submit"]'
 );
@@ -32,19 +37,33 @@ const closeExpenseModalButton = document.querySelector(
 );
 
 const currentMonthDisplay = document.querySelector("#current-month");
-const previousMonthButton = document.querySelector("#previous-month");
+const previousMonthButton = document.querySelector(
+  "#previous-month"
+);
 const nextMonthButton = document.querySelector("#next-month");
 
-const categoryBreakdown = document.querySelector("#category-breakdown");
+const categoryBreakdown = document.querySelector(
+  "#category-breakdown"
+);
 const gaugeProgress = document.querySelector("#gauge-progress");
 const budgetPercent = document.querySelector("#budget-percent");
 const gaugeDetails = document.querySelector("#gauge-details");
 
+const dashboardGreeting = document.querySelector(
+  "#dashboard-greeting"
+);
+
 const savingsForm = document.querySelector("#savings-form");
 const savingsNameInput = document.querySelector("#savings-name");
-const savingsTargetInput = document.querySelector("#savings-target");
-const savingsCurrentInput = document.querySelector("#savings-current");
-const savingsGoalsList = document.querySelector("#savings-goals-list");
+const savingsTargetInput = document.querySelector(
+  "#savings-target"
+);
+const savingsCurrentInput = document.querySelector(
+  "#savings-current"
+);
+const savingsGoalsList = document.querySelector(
+  "#savings-goals-list"
+);
 const addSavingsGoalButton = document.querySelector(
   "#add-savings-goal-button"
 );
@@ -57,6 +76,7 @@ let editingSavingsIndex = null;
 
 function getMonthKey() {
   const year = selectedMonth.getFullYear();
+
   const month = String(
     selectedMonth.getMonth() + 1
   ).padStart(2, "0");
@@ -68,9 +88,11 @@ function getTodayString() {
   const today = new Date();
 
   const year = today.getFullYear();
+
   const month = String(
     today.getMonth() + 1
   ).padStart(2, "0");
+
   const day = String(
     today.getDate()
   ).padStart(2, "0");
@@ -95,11 +117,44 @@ async function getCurrentUser() {
     await supabaseClient.auth.getUser();
 
   if (error) {
-    console.error("Could not get current user:", error);
+    console.error(
+      "Could not get current user:",
+      error
+    );
+
     return null;
   }
 
   return data.user;
+}
+
+async function displayUserGreeting() {
+  if (!dashboardGreeting) {
+    return;
+  }
+
+  const user = await getCurrentUser();
+
+  if (!user) {
+    dashboardGreeting.textContent = "Hey, there";
+    return;
+  }
+
+  const savedName =
+    user.user_metadata?.full_name ||
+    user.user_metadata?.name ||
+    user.user_metadata?.first_name;
+
+  let firstName = savedName
+    ? savedName.trim().split(" ")[0]
+    : user.email?.split("@")[0] || "there";
+
+  firstName =
+    firstName.charAt(0).toUpperCase() +
+    firstName.slice(1);
+
+  dashboardGreeting.textContent =
+    `Hey, ${firstName}`;
 }
 
 function getLocalMonthData() {
@@ -141,18 +196,20 @@ async function migrateLocalMonthIfNeeded(user) {
     return;
   }
 
-  const { data: cloudBudget } = await supabaseClient
-    .from("budgets")
-    .select("id")
-    .eq("user_id", user.id)
-    .eq("month_key", getMonthKey())
-    .maybeSingle();
+  const { data: cloudBudget } =
+    await supabaseClient
+      .from("budgets")
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("month_key", getMonthKey())
+      .maybeSingle();
 
-  const { data: cloudExpenses } = await supabaseClient
-    .from("expenses")
-    .select("id")
-    .eq("user_id", user.id)
-    .eq("month_key", getMonthKey());
+  const { data: cloudExpenses } =
+    await supabaseClient
+      .from("expenses")
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("month_key", getMonthKey());
 
   const hasCloudData =
     cloudBudget ||
@@ -200,7 +257,9 @@ async function migrateLocalMonthIfNeeded(user) {
         .insert(expensesToInsert);
     }
 
-    showMessage("Your existing budget data was imported.");
+    showMessage(
+      "Your existing budget data was imported."
+    );
   }
 
   localStorage.setItem(migrationKey, "true");
@@ -235,18 +294,23 @@ async function loadCurrentMonth() {
       .maybeSingle();
 
   if (budgetError) {
-    console.error("Could not load budget:", budgetError);
+    console.error(
+      "Could not load budget:",
+      budgetError
+    );
   }
 
-  const { data: cloudExpenses, error: expenseError } =
-    await supabaseClient
-      .from("expenses")
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("month_key", getMonthKey())
-      .order("expense_date", {
-        ascending: false
-      });
+  const {
+    data: cloudExpenses,
+    error: expenseError
+  } = await supabaseClient
+    .from("expenses")
+    .select("*")
+    .eq("user_id", user.id)
+    .eq("month_key", getMonthKey())
+    .order("expense_date", {
+      ascending: false
+    });
 
   if (expenseError) {
     console.error(
@@ -256,6 +320,7 @@ async function loadCurrentMonth() {
   }
 
   monthlyIncome = Number(budget?.income) || 0;
+
   monthlyBudgetLimit =
     Number(budget?.budget_limit) || 0;
 
@@ -270,6 +335,7 @@ async function loadCurrentMonth() {
   });
 
   editingId = null;
+
   displaySelectedMonth();
   renderExpenses();
   updateBudgetDisplay();
@@ -298,7 +364,11 @@ async function saveBudget() {
     );
 
   if (error) {
-    console.error("Could not save budget:", error);
+    console.error(
+      "Could not save budget:",
+      error
+    );
+
     alert("Unable to save your budget.");
     return false;
   }
@@ -415,7 +485,9 @@ function formatExpenseDate(dateString) {
     return "Date not provided";
   }
 
-  const date = new Date(`${dateString}T00:00:00`);
+  const date = new Date(
+    `${dateString}T00:00:00`
+  );
 
   if (Number.isNaN(date.getTime())) {
     return "Date not provided";
@@ -467,14 +539,17 @@ function renderExpenses() {
 
   if (expenses.length === 0) {
     const emptyMessage = document.createElement("li");
+
     emptyMessage.className =
       "empty-message expense-empty-state";
 
     const message = document.createElement("span");
+
     message.textContent =
       "Add your first expense to see your progress.";
 
     const addButton = document.createElement("button");
+
     addButton.type = "button";
     addButton.className = "small-button";
     addButton.textContent = "Add Expense";
@@ -492,34 +567,44 @@ function renderExpenses() {
 
   expenses.forEach(function (expense) {
     const listItem = document.createElement("li");
+
     listItem.className = "expense-item";
 
     const info = document.createElement("div");
     info.className = "expense-info";
 
     const description = document.createElement("strong");
-    description.className = "expense-description";
+
+    description.className =
+      "expense-description";
+
     description.textContent =
       expense.description || expense.category;
 
     const details = document.createElement("span");
+
     details.className = "expense-details";
+
     details.textContent =
       `${getCategoryIcon(expense.category)} ` +
       `${expense.category} • ` +
       `${formatExpenseDate(expense.date)}`;
 
     const amount = document.createElement("strong");
+
     amount.className = "expense-amount";
+
     amount.textContent =
       `$${formatMoney(expense.amount)}`;
 
     info.append(description, details);
 
     const menuButton = document.createElement("button");
+
     menuButton.type = "button";
     menuButton.className = "more-button";
     menuButton.textContent = "•••";
+
     menuButton.setAttribute(
       "aria-label",
       `More options for ${
@@ -528,8 +613,10 @@ function renderExpenses() {
     );
 
     const actions = document.createElement("div");
+
     actions.className =
       "card-actions expense-actions";
+
     actions.hidden = true;
 
     menuButton.addEventListener(
@@ -540,6 +627,7 @@ function renderExpenses() {
         closeActionMenus(actions);
 
         actions.hidden = !actions.hidden;
+
         actions.classList.toggle(
           "is-open",
           !actions.hidden
@@ -553,6 +641,7 @@ function renderExpenses() {
     );
 
     const editButton = document.createElement("button");
+
     editButton.type = "button";
     editButton.className = "edit-button";
     editButton.textContent = "Edit";
@@ -573,6 +662,7 @@ function renderExpenses() {
           expense.date || getTodayString();
 
         editingId = expense.id;
+
         expenseSubmitButton.textContent =
           "Update Expense";
 
@@ -581,6 +671,7 @@ function renderExpenses() {
     );
 
     const deleteButton = document.createElement("button");
+
     deleteButton.type = "button";
     deleteButton.className = "delete-button";
     deleteButton.textContent = "Delete";
@@ -613,6 +704,7 @@ function renderExpenses() {
     );
 
     actions.append(editButton, deleteButton);
+
     listItem.append(
       info,
       amount,
@@ -629,18 +721,22 @@ function renderCategoryBreakdown() {
 
   if (expenses.length === 0) {
     const message = document.createElement("p");
+
     message.className = "empty-message";
+
     message.textContent =
       "Add expenses to see your spending breakdown.";
 
     categoryBreakdown.appendChild(message);
+
     return;
   }
 
   const totals = {};
 
   expenses.forEach(function (expense) {
-    const category = expense.category || "Other";
+    const category =
+      expense.category || "Other";
 
     totals[category] =
       (totals[category] || 0) +
@@ -657,34 +753,42 @@ function renderCategoryBreakdown() {
     })
     .forEach(function ([category, amount]) {
       const row = document.createElement("div");
+
       row.className = "category-row";
 
       const header = document.createElement("div");
+
       header.className = "category-header";
 
       const name = document.createElement("span");
+
       name.textContent =
         `${getCategoryIcon(category)} ${category}`;
 
       const categoryAmount =
         document.createElement("span");
 
-      categoryAmount.className = "category-amount";
+      categoryAmount.className =
+        "category-amount";
+
       categoryAmount.textContent =
         `$${formatMoney(amount)}`;
 
       header.append(name, categoryAmount);
 
       const bar = document.createElement("div");
+
       bar.className = "category-bar";
 
       const fill = document.createElement("div");
+
       fill.className = "category-fill";
 
       fill.style.width =
         `${(amount / largestAmount) * 100}%`;
 
       bar.appendChild(fill);
+
       row.append(header, bar);
       categoryBreakdown.appendChild(row);
     });
@@ -797,12 +901,15 @@ expenseForm.addEventListener(
       return;
     }
 
+    const wasEditing = Boolean(editingId);
+
     resetExpenseForm();
     closeExpenseForm();
+
     await loadCurrentMonth();
 
     showMessage(
-      editingId
+      wasEditing
         ? "Expense updated."
         : "Expense added."
     );
@@ -854,8 +961,6 @@ document.addEventListener(
   }
 );
 
-/* Savings goals remain locally stored for now */
-
 function saveSavingsGoals() {
   localStorage.setItem(
     "savings-goals",
@@ -884,11 +989,14 @@ function renderSavingsGoals() {
 
   if (savingsGoals.length === 0) {
     const message = document.createElement("p");
+
     message.className = "empty-message";
+
     message.textContent =
       "Add a savings goal to start tracking your progress.";
 
     savingsGoalsList.appendChild(message);
+
     return;
   }
 
@@ -898,28 +1006,39 @@ function renderSavingsGoals() {
 
     const percentage =
       target > 0
-        ? Math.min(Math.round(
-            (current / target) * 100
-          ), 100)
+        ? Math.min(
+            Math.round(
+              (current / target) * 100
+            ),
+            100
+          )
         : 0;
 
     const card = document.createElement("div");
-    card.className = "savings-goal-card";
+
+    card.className =
+      "savings-goal-card";
 
     const title = document.createElement("h3");
+
     title.textContent = goal.name;
 
     const amounts = document.createElement("div");
-    amounts.className = "savings-amounts";
+
+    amounts.className =
+      "savings-amounts";
+
     amounts.innerHTML =
       `<span>$${formatMoney(current)} saved</span>` +
       `<span>Goal: $${formatMoney(target)}</span>`;
 
     const progressBar = document.createElement("div");
+
     progressBar.className =
       "savings-progress-bar";
 
     const progressFill = document.createElement("div");
+
     progressFill.className =
       "savings-progress-fill";
 
@@ -929,6 +1048,7 @@ function renderSavingsGoals() {
     progressBar.appendChild(progressFill);
 
     const percent = document.createElement("p");
+
     percent.className =
       "savings-progress-percent";
 
@@ -936,24 +1056,38 @@ function renderSavingsGoals() {
       `${percentage}% complete`;
 
     const menuButton = document.createElement("button");
+
     menuButton.type = "button";
     menuButton.className = "more-button";
     menuButton.textContent = "•••";
+    menuButton.setAttribute(
+      "aria-label",
+      `More options for ${goal.name}`
+    );
 
     const actions = document.createElement("div");
+
     actions.className =
       "card-actions savings-buttons";
+
     actions.hidden = true;
 
     menuButton.addEventListener(
       "click",
       function () {
         closeActionMenus(actions);
+
         actions.hidden = !actions.hidden;
+
+        actions.classList.toggle(
+          "is-open",
+          !actions.hidden
+        );
       }
     );
 
     const editButton = document.createElement("button");
+
     editButton.type = "button";
     editButton.className = "edit-button";
     editButton.textContent = "Edit";
@@ -964,18 +1098,22 @@ function renderSavingsGoals() {
         savingsNameInput.value = goal.name;
         savingsTargetInput.value = target;
         savingsCurrentInput.value = current;
+
         editingSavingsIndex = index;
         savingsSubmitButton.textContent =
           "Update Goal";
+
         savingsForm.hidden = false;
         savingsNameInput.focus();
       }
     );
 
     const deleteButton = document.createElement("button");
+
     deleteButton.type = "button";
     deleteButton.className =
       "delete-goal-button";
+
     deleteButton.textContent = "Delete";
 
     deleteButton.addEventListener(
@@ -992,6 +1130,7 @@ function renderSavingsGoals() {
         savingsGoals.splice(index, 1);
         saveSavingsGoals();
         renderSavingsGoals();
+
         showMessage("Savings goal deleted.");
       }
     );
@@ -1015,8 +1154,12 @@ addSavingsGoalButton.addEventListener(
   "click",
   function () {
     editingSavingsIndex = null;
+
     savingsForm.reset();
-    savingsSubmitButton.textContent = "Save Goal";
+
+    savingsSubmitButton.textContent =
+      "Save Goal";
+
     savingsForm.hidden = false;
     savingsNameInput.focus();
   }
@@ -1049,6 +1192,7 @@ savingsForm.addEventListener(
       alert(
         "Amount saved must be between $0 and the target."
       );
+
       return;
     }
 
@@ -1071,7 +1215,10 @@ savingsForm.addEventListener(
 
     savingsForm.reset();
     savingsForm.hidden = true;
-    savingsSubmitButton.textContent = "Save Goal";
+
+    savingsSubmitButton.textContent =
+      "Save Goal";
+
     editingSavingsIndex = null;
   }
 );
@@ -1085,8 +1232,10 @@ function showMessage(message) {
 
   if (!messageBox) {
     messageBox = document.createElement("div");
+
     messageBox.id = "app-message";
     messageBox.setAttribute("role", "status");
+
     document.body.appendChild(messageBox);
   }
 
@@ -1095,10 +1244,14 @@ function showMessage(message) {
 
   clearTimeout(messageTimeout);
 
-  messageTimeout = setTimeout(function () {
-    messageBox.classList.remove("visible");
-  }, 2500);
+  messageTimeout = setTimeout(
+    function () {
+      messageBox.classList.remove("visible");
+    },
+    2500
+  );
 }
 
+displayUserGreeting();
 loadSavingsGoals();
 loadCurrentMonth();
