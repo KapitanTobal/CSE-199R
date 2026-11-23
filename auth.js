@@ -1,11 +1,13 @@
 const authForm = document.querySelector("#auth-form");
+const displayNameInput = document.querySelector("#display-name");
 const emailInput = document.querySelector("#email");
 const passwordInput = document.querySelector("#password");
 const loginButton = document.querySelector("#login-button");
 const signupButton = document.querySelector("#signup-button");
+const forgotPasswordButton = document.querySelector(
+  "#forgot-password-button"
+);
 const logoutButton = document.querySelector("#logout-button");
-const forgotPasswordButton =
-  document.querySelector("#forgot-password-button");
 const authMessage = document.querySelector("#auth-message");
 
 function showMessage(message, isError = false) {
@@ -18,10 +20,7 @@ function showMessage(message, isError = false) {
 function setLoading(isLoading) {
   loginButton.disabled = isLoading;
   signupButton.disabled = isLoading;
-
-  if (forgotPasswordButton) {
-    forgotPasswordButton.disabled = isLoading;
-  }
+  forgotPasswordButton.disabled = isLoading;
 
   loginButton.textContent = isLoading
     ? "Please wait..."
@@ -43,7 +42,6 @@ function getSafeReturnTo() {
       window.location.origin
     );
 
-    // Only allow redirects to this same website.
     if (
       destination.origin !==
       window.location.origin
@@ -88,20 +86,23 @@ async function logIn() {
     return;
   }
 
-  showMessage("You are logged in.");
-
-  if (logoutButton) {
-    logoutButton.hidden = false;
-  }
-
-  window.location.replace(
-    getSafeReturnTo()
-  );
+  window.location.replace(getSafeReturnTo());
 }
 
 async function createAccount() {
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
+  const displayName =
+    displayNameInput.value.trim();
+
+  const email =
+    emailInput.value.trim();
+
+  const password =
+    passwordInput.value;
+
+  if (!displayName) {
+    showMessage("Please enter your name.", true);
+    return;
+  }
 
   if (!email || !password) {
     showMessage(
@@ -124,19 +125,33 @@ async function createAccount() {
   const { error } =
     await supabaseClient.auth.signUp({
       email,
-      password
+      password,
+      options: {
+        data: {
+          full_name: displayName
+        }
+      }
     });
 
   setLoading(false);
 
   if (error) {
-    showMessage(error.message, true);
+    if (
+      error.code === "over_email_send_rate_limit" ||
+      error.message.toLowerCase().includes("rate limit")
+    ) {
+      showMessage(
+        "Too many sign-up attempts. Please try again later.",
+        true
+      );
+    } else {
+      showMessage(error.message, true);
+    }
+
     return;
   }
 
-  showMessage(
-    "Account created. Check your email if confirmation is required."
-  );
+  showMessage("Account created successfully.");
 }
 
 async function resetPassword() {
@@ -150,11 +165,8 @@ async function resetPassword() {
     return;
   }
 
-  if (forgotPasswordButton) {
-    forgotPasswordButton.disabled = true;
-    forgotPasswordButton.textContent =
-      "Sending...";
-  }
+  forgotPasswordButton.disabled = true;
+  forgotPasswordButton.textContent = "Sending...";
 
   const resetPageUrl =
     new URL(
@@ -170,11 +182,9 @@ async function resetPassword() {
       }
     );
 
-  if (forgotPasswordButton) {
-    forgotPasswordButton.disabled = false;
-    forgotPasswordButton.textContent =
-      "Forgot password?";
-  }
+  forgotPasswordButton.disabled = false;
+  forgotPasswordButton.textContent =
+    "Forgot password?";
 
   if (error) {
     showMessage(error.message, true);
@@ -195,11 +205,9 @@ async function logOut() {
     return;
   }
 
+  authForm.hidden = false;
+  logoutButton.hidden = true;
   showMessage("You are logged out.");
-
-  if (logoutButton) {
-    logoutButton.hidden = true;
-  }
 }
 
 authForm.addEventListener(
@@ -215,33 +223,30 @@ signupButton.addEventListener(
   createAccount
 );
 
-if (forgotPasswordButton) {
-  forgotPasswordButton.addEventListener(
-    "click",
-    resetPassword
-  );
-}
+forgotPasswordButton.addEventListener(
+  "click",
+  resetPassword
+);
 
-if (logoutButton) {
-  logoutButton.addEventListener(
-    "click",
-    logOut
-  );
-}
+logoutButton.addEventListener(
+  "click",
+  logOut
+);
 
 async function checkCurrentUser() {
   const { data } =
     await supabaseClient.auth.getSession();
 
-  if (data.session) {
-    showMessage(
-      `Logged in as ${data.session.user.email}`
-    );
-
-    if (logoutButton) {
-      logoutButton.hidden = false;
-    }
+  if (!data.session) {
+    return;
   }
+
+  authForm.hidden = true;
+  logoutButton.hidden = false;
+
+  showMessage(
+    `Logged in as ${data.session.user.email}`
+  );
 }
 
 checkCurrentUser();

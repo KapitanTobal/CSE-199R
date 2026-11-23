@@ -1,4 +1,4 @@
-const CACHE_NAME = "budget-dashboard-v8";
+const CACHE_NAME = "budget-dashboard-v9";
 
 const APP_FILES = [
     "./",

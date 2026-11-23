@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
 
   <title>Log In | Budget Dashboard</title>
 
   <link rel="stylesheet" href="style.css">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
-
-
+  <meta name="theme-color" content="#007aff">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
+  >
 </head>
 
 <body class="auth-page">
@@ -25,7 +31,16 @@
     <section class="auth-card">
       <h2>Account</h2>
 
-        <form id="auth-form" method="post">
+      <form id="auth-form" method="post">
+        <label for="display-name">Your name:</label>
+
+        <input
+          type="text"
+          id="display-name"
+          placeholder="Your name"
+          autocomplete="name"
+        >
+
         <label for="email">Email address:</label>
 
         <input
@@ -38,30 +53,48 @@
 
         <label for="password">Password:</label>
 
-        <input type="password" id="password" placeholder="At least 8 characters" minlength="8"
-          autocomplete="current-password" required>
+        <input
+          type="password"
+          id="password"
+          placeholder="At least 8 characters"
+          minlength="8"
+          autocomplete="current-password"
+          required
+        >
+
         <button type="submit" id="login-button">
           Log In
         </button>
 
-        <button type="button" id="signup-button" class="outline-button">
+        <button
+          type="button"
+          id="signup-button"
+          class="outline-button">
           Create Account
         </button>
 
-        <button type="button" id="forgot-password-button" class="text-button">
+        <button
+          type="button"
+          id="forgot-password-button"
+          class="text-button">
           Forgot password?
         </button>
       </form>
 
       <p id="auth-message" aria-live="polite"></p>
 
-      <button type="button" id="logout-button" class="delete-button" hidden>
+      <button
+        type="button"
+        id="logout-button"
+        class="delete-button"
+        hidden>
         Log Out
       </button>
     </section>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
   <script src="auth.js"></script>
 </body>
-
 </html>
